@@ -12,7 +12,7 @@ steps:
   image: plugins/hugo
   settings:
     hugo_version: 0.69.2
-    validate: true
+    validate: false
 
 - name: publish
   image: plugins/gh-release
