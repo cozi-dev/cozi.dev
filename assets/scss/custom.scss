@@ -10,4 +10,10 @@ html {
   #logo-dark {
     margin-top: 0;
   }
+
+  body {
+    &>div {
+      margin-top: 0;
+    }
+  }
 }
