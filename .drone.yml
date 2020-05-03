@@ -11,7 +11,7 @@ steps:
 - name: build
   image: plugins/hugo
   settings:
-    hugoVersion: 0.69.2
+    hugo_version: 0.69.2
     validate: true
     hugoExtended: true
 
