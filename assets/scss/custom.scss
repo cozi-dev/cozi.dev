@@ -1,0 +1,9 @@
+$lightColor: #fbfbfb;
+
+html {
+  background-color: $lightColor;
+
+  .file-tree li {
+    background-color: $lightColor;
+  }
+}

@@ -1,0 +1,13 @@
+kind: pipeline
+
+steps:
+- name: build
+  image: plugins/hugo
+  settings:
+    hugo_version: 0.69
+    validate: true
+
+- name: publish
+  image: plugins/gh-release
+  settings:
+    pages_directory: public/
