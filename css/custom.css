@@ -2,3 +2,5 @@ html {
   background-color: #fbfbfb; }
   html .file-tree li {
     background-color: #fbfbfb; }
+  html #logo-dark {
+    margin-top: 0; }
