@@ -1,4 +1,4 @@
-baseURL = "http://example.org/"
+baseURL = "https://cozi-dev.github.io/cozi.dev/"
 languageCode = "en-us"
 title = "Cozi"
 theme = "cupper-hugo-theme"
