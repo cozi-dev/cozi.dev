@@ -7,10 +7,15 @@ steps:
   image: plugins/hugo
   settings:
     hugo_version: 0.69.2
-    validate: true
-    theme: ./themes/cupper-hugo-theme # git submodule update --init --recursive
 
 - name: publish
   image: plugins/gh-release
   settings:
     pages_directory: public/
+
+trigger:
+  branch:
+  - master
+  event:
+  - push
+  - pull_request
