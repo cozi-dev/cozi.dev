@@ -8,6 +8,7 @@ steps:
   settings:
     hugo_version: 0.69.2
     validate: true
+    theme: cupper-hugo-theme # git submodule update --init --recursive
 
 - name: publish
   image: plugins/gh-release
