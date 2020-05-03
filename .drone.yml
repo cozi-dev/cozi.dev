@@ -11,9 +11,9 @@ steps:
 - name: build
   image: plugins/hugo
   settings:
-    hugo_version: 0.69.2
+    hugoVersion: 0.69.2
     validate: true
-    hugo_extended: true
+    hugoExtended: true
 
 - name: publish
   image: plugins/gh-release
