@@ -1,4 +1,4 @@
-baseURL = "https://cozi-dev.github.io/cozi.dev/"
+baseURL = "https://cozi.dev/"
 languageCode = "en-us"
 title = "Cozi"
 theme = "cupper-hugo-theme"
