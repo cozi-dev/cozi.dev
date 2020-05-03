@@ -4,3 +4,5 @@ html {
     background-color: #fbfbfb; }
   html #logo-dark {
     margin-top: 0; }
+  html body > div {
+    margin-top: 0; }
