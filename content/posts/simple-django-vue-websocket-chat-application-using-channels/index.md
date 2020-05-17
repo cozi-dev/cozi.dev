@@ -2,7 +2,6 @@
 title: "Simple Django Vue Websocket Chat Application Using Channels"
 date: 2020-05-17T14:17:27+07:00
 tags: ["django", "vue", "websocket", "chat", "channels"]
-draft: true
 ---
 
 ## Introduction
