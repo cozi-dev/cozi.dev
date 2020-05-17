@@ -1,19 +1,67 @@
-$lightColor: #fbfbfb;
+@import "components/shortcode.scss";
+@import "mixins/breakpoint.scss";
 
-html {
-  background-color: $lightColor;
+#logo {
+  border: none;
+  width: 60px;
+}
 
-  .file-tree li {
-    background-color: $lightColor;
+img {
+  border: 1px dashed;
+  border-radius: 6px;
+}
+
+.credits {
+  font-size: .85rem;
+  line-height: 1.25;
+  color: #ababab;
+
+  a {
+    font-size: .85rem;
+  }
+}
+
+.toc {
+  border-left: 4px solid #63bda2;
+  padding-left: 0.75em;
+  
+  &.bot {
+    margin-bottom: 1.25em;
+    display: none;
+
+    @include media(900px) {
+      display: block;
+    }
   }
 
-  #logo-dark {
+  &.top {
+    margin-top: 1.25em;
+
+    @include media(900px) {
+      display: none;
+    }
+  }
+
+  .toc-label {
+    font-size: 1.1em;
     margin-top: 0;
   }
 
-  body {
-    &>div {
-      margin-top: 0;
+  #TableOfContents {
+    position: static;
+    padding: 0;
+
+    & > ul {
+      padding: 0;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+
+      a {
+        text-decoration: none;
+      }
     }
   }
 }

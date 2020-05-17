@@ -1,23 +1,23 @@
-<nav id="patterns-nav" class="patterns" role="navigation">
-  <h2 class="vh">Main navigation</h2>
-  <button id="menu-button" aria-expanded="false">
-    <svg viewBox="0 0 50 50" aria-hidden="true" focusable="false">
-      <use xlink:href="#menu"></use>
-    </svg>
-    Menu
-  </button>
-  {{ $current := . }}
-  <ul id="patterns-list">
-  {{ range .Site.Menus.nav }}
-    <li class="pattern">
-      {{ $active := or ($current.IsMenuCurrent "nav" .) ($current.HasMenuCurrent "nav" .) }}
-      {{ $active = or $active (eq .Name $current.Title) }}
-      {{ $active = or $active (and (eq .Name "Blog") (eq $current.Section "post")) }}
-      {{ $active = or $active (and (eq .Name "Tags") (eq $current.Section "tags")) }}
-      <a href="{{ .URL }}" {{ if $active }}aria-current="page"{{ end }}>
-        <span class="text">{{ .Name }}</span>
-      </a>
-    </li>
+<!-- Sidebar navigation -->
+<nav>
+  {{ partial "header.html" . }}
+
+  {{ if eq .Type "posts"}}
+  <div class="toc bot">
+    <small>{{ partial "time-to-read.html" . }}</small>
+    <h6 class="toc-label">What's on this page</h6>
+    <div class="toc-body">
+      {{ .TableOfContents }}
+    </div>
+  </div>
   {{ end }}
-  </ul>
+
+  <div class="nav-menu">
+  {{ range .Site.Menus.main }}
+    <a class="color-link nav-link" href="{{ .URL | relLangURL }}">{{ .Name }}</a>
+  {{ end }}
+  <a class="color-link nav-link" href="{{ .Site.RSSLink }}" target="_blank" rel="noopener" type="application/rss+xml">RSS</a>
+</div>
+
+{{ partial "footer.html" . }}
 </nav>

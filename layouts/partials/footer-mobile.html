@@ -1,0 +1,13 @@
+<footer class="footer-mobile">
+	{{ partial "social.html" . }}
+
+	<div class="footer-mobile-links">
+		<p class="credits">
+			Built with <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> & <a href="https://github.com/kimcc/hugo-theme-noteworthy" target="_blank" rel="noopener">Noteworthy</a>
+		</p>
+	</div>
+
+	{{ $script := resources.Get "js/main.js" | minify | fingerprint -}}
+	<script src="{{ $script.Permalink }}" {{ printf "integrity=%q" $script.Data.Integrity | safeHTMLAttr }} crossorigin="anonymous"></script>
+	<script async src="https://sdk.owids.com/js/app.js#id=bqnb4q1ba1fujo6isg10"></script>
+</footer>

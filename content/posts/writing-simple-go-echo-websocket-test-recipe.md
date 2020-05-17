@@ -1,11 +1,12 @@
 ---
 title: "Writing Simple Go Echo Websocket Test Recipe"
 date: 2020-05-05T22:37:57+07:00
+tags: ["go", "echo", "test", "websocket"]
 ---
 
 ## Introduction
 
-Today, I'll show you how I set up a simple test for WebSocket using [gorilla/websocket](https://github.com/gorilla/websocket) in [Echo](https://github.com/labstack/echo) framework and how it makes me more confident with my code :)
+Today, I'll show you how I set up a simple test for WebSocket using [gorilla/websocket](https://github.com/gorilla/websocket) in [Echo](https://github.com/labstack/echo) framework and how it makes me more confident with my code :smile:
 
 ## Let's get started
 
@@ -13,7 +14,7 @@ Today, I'll show you how I set up a simple test for WebSocket using [gorilla/web
 
 The handler just simply says hello to the client (`Hello, Client!`) and reads the message from the client.
 
-```go {linenos=table,hl_lines=[8,"15-17"],linenostart=1}
+```go
 // websocket.go
 
 package websocket

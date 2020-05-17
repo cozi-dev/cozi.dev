@@ -21,11 +21,9 @@ This tutorial will show you how to set up [Drone CI](https://drone.io/) for GitH
 
 {{< /ticks >}}
 
-But when I first started I found that the Drone installation document is hard for me. So, I will share my steps here if it could help someone else like me :)
+But when I first started I found that the Drone installation document is hard for me. So, I will share my steps here if it could help someone else like me :sweat_smile:
 
-{{< note >}}
-Although, GitHub is using for this article but you can use Drone with your favorite source code management system too.
-{{< /note >}}
+**Note:** Although, GitHub is using for this article but you can use Drone with your favorite source code management system too.
 
 ## Prerequisites
 
@@ -33,17 +31,13 @@ You need to install Ansible by following [this installation guide](https://docs.
 
 **Prepare a GitHub OAuth application:**
 
-{{<figureCupper
-img="new_oauth_application.jpg"
-caption="Create a GitHub OAuth application by follow this address [https://github.com/settings/applications/new](https://github.com/settings/applications/new)."
-command="Resize"
-options="960x" >}}
+Create a GitHub OAuth application by follow this address [https://github.com/settings/applications/new](https://github.com/settings/applications/new).
 
-{{<figureCupper
-img="oauth_application_settings.jpg"
-caption="The Client ID and Client Secret are used to authorize access to GitHub resources."
-command="Resize"
-options="960x" >}}
+{{< resize-image src="new_oauth_application.jpg" >}}
+
+The Client ID and Client Secret are used to authorize access to GitHub resources.
+
+{{< resize-image src="oauth_application_settings.jpg" >}}
 
 ## Ansible playbook
 
@@ -92,17 +86,13 @@ Clone it to your machine and update those file's variables with your own configu
 
 ### Run playbook to install Drone
 
-{{< cmd >}}
+```bash
 ansible-playbook drone.yml -i ./inventories/host.yaml
-{{< /cmd >}}
+```
 
 After this step, you can go to your domain address to access Drone dashboard:
 
-{{<figureCupper
-img="drone_ci_dashboard.jpg"
-caption="Drone dashboard - simple and fast."
-command="Resize"
-options="960x" >}}
+{{< resize-image src="drone_ci_dashboard.jpg" caption="Drone dashboard - simple and fast." >}}
 
 ## Tips
 
@@ -110,7 +100,7 @@ You can config Drone CLI to manage secret variables by following this [link](htt
 
 Grab your API Token from **User settings**:
 
-![User settings](account_drone_ci.jpg)
+{{< resize-image src="account_drone_ci.jpg" caption="User settings." >}}
 
 **For example:**
 

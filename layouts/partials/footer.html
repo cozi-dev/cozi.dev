@@ -1,5 +1,7 @@
-<footer role="contentinfo">
-  {{ with .Site.Params.footer }}
-    {{ . | markdownify }}
-  {{ end }}
+<footer class="footer">
+	{{ partial "social.html" . }}
+
+	<p class="credits">
+		Built with <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> &<br><a href="https://github.com/kimcc/hugo-theme-noteworthy" target="_blank" rel="noopener">Noteworthy</a>
+	</p>
 </footer>

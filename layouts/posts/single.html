@@ -1,48 +1,43 @@
 {{ define "main" }}
-  <main id="main">
-    <h1>
-      <svg class="bookmark-icon" aria-hidden="true" viewBox="0 0 40 50" focusable="false">
-        <use xlink:href="#bookmark"></use>
-      </svg>
-      {{ .Title }}
-    </h1>
 
-    {{ partial "time-to-read.html" . }}
-
-    <div class="date">
-      {{ $dateFormat := $.Site.Params.dateFormat | default "Jan 2, 2006" }}
-      {{ $publishDate := .PublishDate }}
-      <strong aria-hidden="true">Publish date: </strong>{{ $publishDate.Format $dateFormat }}
-      {{ with .Lastmod }}
-        {{ if gt . $publishDate }}
-          <br>
-          <strong aria-hidden="true">Last updated: </strong>{{ .Format $dateFormat }}
-        {{ end }}
-      {{ end }}
-    </div>
-
-    {{ with .Params.tags }}
-      <div class="tags">
-        <strong aria-hidden="true">Tags: </strong>
-        <ul aria-label="tags">
-          {{ range . }}
-            <li>
-              <svg class="tag-icon" aria-hidden="true" viewBox="0 0 177.16535 177.16535" focusable="false">
-                <use xlink:href="#tag"></use>
-              </svg>
-              {{ $href := print ("tags/" | absLangURL) (. | urlize) "/" }}
-              <a href="{{ $href }}">{{ . }}</a>
-            </li>
-          {{ end }}
-        </ul>
-      </div>
-    {{ end }}
-    
-    {{ if ne .Params.toc false }}
-      {{ partial "toc" . }}
-    {{ end }}
-
-    {{ .Content }}
-  </main>
-  {{ partial "disqus.html" . }}
+<h1 class="post-title">{{ .Title }}</h1>
+{{ if .Date }}
+<time>{{ .Date.Format "January 2, 2006" }}</time>
 {{ end }}
+
+<div class="toc top">
+  <small>{{ partial "time-to-read.html" . }}</small>
+  <h6 class="toc-label">What's on this page</h6>
+  <div class="toc-body">
+    {{ .TableOfContents }}
+  </div>
+</div>
+
+<div>
+    <p>
+    {{ .Content }}
+    </p>
+</div>
+{{ template "_internal/disqus.html" . }}
+
+{{ if .Site.Params.enableKofi }}
+
+    <script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script>
+    <script type='text/javascript'>
+        const kofiId = '{{ .Site.Params.Kofi }}';
+        kofiwidget2.init('Support Me on Ko-fi', '#29abe0', kofiId);
+        kofiwidget2.draw();
+    </script> 
+
+{{ end }}
+
+<div class="page-footer">
+    {{if .Params.tags}}
+    <hr class="footer-divider">
+    {{ range .Params.tags }}
+        <a class="tag" href="/tags/{{ . | urlize }}">#{{.}}</a>
+    {{ end }}
+    {{ end }}
+</div>
+
+{{end}}

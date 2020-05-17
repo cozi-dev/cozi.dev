@@ -1,0 +1,73 @@
+baseURL = "https://cozi.dev/"
+languageCode = "en-us"
+title = "Cozi"
+theme = "cupper-hugo-theme"
+googleAnalytics = ''
+disqusShortname = 'cozi-dev'
+enableGitInfo = false
+
+[taxonomies]
+tag = 'tags'
+
+[permalinks]
+post = '/:filename/'
+
+[imaging]
+quality = 99
+
+[params]
+description = ''
+homeMetaContent = ''
+footer = '© 2020 Cozi.<br><small>[RSS](/index.xml)</small>.<br>Made with Hugo and Cupper.'
+dateFormat = 'Jan 2, 2006'
+codePenUser = ''
+katex = false
+
+[[menu.nav]]
+name = 'Home'
+url = '/'
+weight = 1
+
+[[menu.nav]]
+name = 'About'
+url = '/about/'
+weight = 2
+
+[[menu.nav]]
+name = 'Tags'
+url = '/tags/'
+weight = 3
+
+[markup]
+defaultMarkdownHandler = 'goldmark'
+[markup.goldmark.extensions]
+definitionList = true
+footnote = true
+linkify = true
+strikethrough = true
+table = true
+taskList = true
+typographer = true
+
+[markup.goldmark.parser]
+attribute = true
+autoHeadingID = true
+
+[markup.goldmark.renderer]
+hardWraps = false
+unsafe = true
+xHTML = false
+
+[markup.highlight]
+codeFences = false
+hl_Lines = ''
+lineNoStart = 1
+lineNos = false
+lineNumbersInTable = true
+noClasses = true
+style = 'monokai'
+tabWidth = 4
+
+[markup.tableOfContents]
+endLevel = 6
+startLevel = 2
