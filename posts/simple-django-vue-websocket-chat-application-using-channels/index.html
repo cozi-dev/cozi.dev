@@ -1,0 +1,159 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=format-detection content="telephone=no"><title>Simple Django Vue Websocket Chat Application Using Channels | Cozi</title><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#ff3db4><meta name=theme-color content="#ffffff"><link rel=stylesheet href=https://cozi.dev/css/main.min.15431d6c334f65809fe2bc329da3f2c81c6e3027ab1e25b56afb2bb85fa7fd64.css><link rel=stylesheet href=https://cozi.dev/scss/custom.min.a2de6e77e3aa609f3b94c315bd0e864e20943cbdf00a2382c3a93574ec5ab588.css></head><body><nav><header><div class=site-title><a href=/><img id=logo src=https://cozi.dev/images/logo.svg title=Cozi alt=logo></a></div></header><div class="toc bot"><small>3 mins read</small><h6 class=toc-label>What's on this page</h6><div class=toc-body><nav id=TableOfContents><ul><li><a href=#introduction>Introduction</a></li><li><a href=#walk-thourgh>Walk thourgh</a><ul><li><a href=#chat-consumer>Chat consumer</a></li><li><a href=#chat-client>Chat client</a></li></ul></li><li><a href=#conclusion>Conclusion</a></li></ul></nav></div></div><div class=nav-menu><a class="color-link nav-link" href=/about/>About</a>
+<a class="color-link nav-link" href=/tags/>Tags</a>
+<a class="color-link nav-link" href=/archives/>Archives</a>
+<a class="color-link nav-link" href=https://cozi.dev/index.xml target=_blank rel=noopener type=application/rss+xml>RSS</a></div><footer class=footer><div class=social-icons></div><p class=credits>Built with <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a> &<br><a href=https://github.com/kimcc/hugo-theme-noteworthy target=_blank rel=noopener>Noteworthy</a></p></footer></nav><div id=content class=content-container><h1 class=post-title>Simple Django Vue Websocket Chat Application Using Channels</h1><time>May 17, 2020</time><div class="toc top"><small>3 mins read</small><h6 class=toc-label>What's on this page</h6><div class=toc-body><nav id=TableOfContents><ul><li><a href=#introduction>Introduction</a></li><li><a href=#walk-thourgh>Walk thourgh</a><ul><li><a href=#chat-consumer>Chat consumer</a></li><li><a href=#chat-client>Chat client</a></li></ul></li><li><a href=#conclusion>Conclusion</a></li></ul></nav></div></div><div><p><h2 id=introduction>Introduction</h2><p>In this article, we will create a simple chat application using <a href=https://www.djangoproject.com/ target=_blank>django</a>
+, <a href=https://vuejs.org/ target=_blank>vue</a>
+and <a href=https://github.com/django/channels target=_blank>channels</a>
+.</p><p><strong>Note:</strong> Source code for this article can be found <a href=https://github.com/tungquach/django-vue-websocket-chat target=_blank>here</a>
+. You can pull it to your machine and run <code>docker-compose up</code> to start.</p><p>Our chat application looks like this:</p><img class=article-image src=/posts/simple-django-vue-websocket-chat-application-using-channels/chat_app.jpg alt><h2 id=walk-thourgh>Walk thourgh</h2><h3 id=chat-consumer>Chat consumer</h3><p>Your chat consumer located in <code>chat/consumers.py</code>.
+This file allow you to receive message from a chat group and send it to other people in this group.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> asgiref.sync <span style=color:#f92672>import</span> async_to_sync
+<span style=color:#f92672>from</span> channels.generic.websocket <span style=color:#f92672>import</span> AsyncWebsocketConsumer
+<span style=color:#f92672>import</span> json
+
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>ChatConsumer</span>(AsyncWebsocketConsumer):
+    async <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>connect</span>(self):
+        self<span style=color:#f92672>.</span>room_name <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>scope[<span style=color:#e6db74>&#34;url_route&#34;</span>][<span style=color:#e6db74>&#34;kwargs&#34;</span>][<span style=color:#e6db74>&#34;room_name&#34;</span>]
+        self<span style=color:#f92672>.</span>room_group_name <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;chat_</span><span style=color:#e6db74>%s</span><span style=color:#e6db74>&#34;</span> <span style=color:#f92672>%</span> self<span style=color:#f92672>.</span>room_name
+
+        <span style=color:#75715e># Join room group</span>
+        await self<span style=color:#f92672>.</span>channel_layer<span style=color:#f92672>.</span>group_add(self<span style=color:#f92672>.</span>room_group_name, self<span style=color:#f92672>.</span>channel_name)
+
+        await self<span style=color:#f92672>.</span>accept()
+
+    async <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>disconnect</span>(self, close_code):
+        <span style=color:#75715e># Leave room group</span>
+        await self<span style=color:#f92672>.</span>channel_layer<span style=color:#f92672>.</span>group_discard(self<span style=color:#f92672>.</span>room_group_name, self<span style=color:#f92672>.</span>channel_name)
+
+    <span style=color:#75715e># Receive message from WebSocket</span>
+    async <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>receive</span>(self, text_data):
+        text_data_json <span style=color:#f92672>=</span> json<span style=color:#f92672>.</span>loads(text_data)
+        message <span style=color:#f92672>=</span> text_data_json[<span style=color:#e6db74>&#34;message&#34;</span>]
+
+        <span style=color:#75715e># Send message to room group</span>
+        await self<span style=color:#f92672>.</span>channel_layer<span style=color:#f92672>.</span>group_send(
+            self<span style=color:#f92672>.</span>room_group_name, {<span style=color:#e6db74>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;chat_message&#34;</span>, <span style=color:#e6db74>&#34;message&#34;</span>: message}
+        )
+
+    <span style=color:#75715e># Receive message from room group</span>
+    async <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>chat_message</span>(self, event):
+        message <span style=color:#f92672>=</span> event[<span style=color:#e6db74>&#34;message&#34;</span>]
+
+        <span style=color:#75715e># Send message to WebSocket</span>
+        await self<span style=color:#f92672>.</span>send(text_data<span style=color:#f92672>=</span>json<span style=color:#f92672>.</span>dumps({<span style=color:#e6db74>&#34;message&#34;</span>: message}))
+</code></pre></div><p>And here is routing configuration for your consumer <code>chat/routing.py</code></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>from</span> django.urls <span style=color:#f92672>import</span> re_path
+<span style=color:#f92672>from</span> . <span style=color:#f92672>import</span> consumers
+
+websocket_urlpatterns <span style=color:#f92672>=</span> [
+    re_path(<span style=color:#e6db74>r</span><span style=color:#e6db74>&#39;ws/chat/(?P&lt;room_name&gt;\w+)/$&#39;</span>, consumers<span style=color:#f92672>.</span>ChatConsumer)
+]
+</code></pre></div><p>Make sure your chat consumer is working correctly with <code>chat/tests/test_chat_consumer.py</code></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=color:#f92672>import</span> pytest
+<span style=color:#f92672>from</span> channels.testing <span style=color:#f92672>import</span> WebsocketCommunicator
+<span style=color:#f92672>from</span> chat.consumers <span style=color:#f92672>import</span> ChatConsumer
+<span style=color:#f92672>from</span> channels.routing <span style=color:#f92672>import</span> URLRouter
+<span style=color:#f92672>from</span> django.urls <span style=color:#f92672>import</span> re_path
+
+
+<span style=color:#a6e22e>@pytest.mark.asyncio</span>
+async <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>test_chat_consumer</span>():
+    application <span style=color:#f92672>=</span> URLRouter([re_path(<span style=color:#e6db74>r</span><span style=color:#e6db74>&#34;ws/chat/(?P&lt;room_name&gt;\w+)/$&#34;</span>, ChatConsumer)])
+    communicator <span style=color:#f92672>=</span> WebsocketCommunicator(application, <span style=color:#e6db74>&#34;/ws/chat/newbie/&#34;</span>)
+    connected, subprotocol <span style=color:#f92672>=</span> await communicator<span style=color:#f92672>.</span>connect()
+    <span style=color:#66d9ef>assert</span> connected
+
+    <span style=color:#75715e># test sending text</span>
+    await communicator<span style=color:#f92672>.</span>send_json_to({<span style=color:#e6db74>&#34;message&#34;</span>: <span style=color:#e6db74>&#34;hello&#34;</span>})
+    response <span style=color:#f92672>=</span> await communicator<span style=color:#f92672>.</span>receive_json_from()
+    <span style=color:#66d9ef>assert</span> response<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#34;message&#34;</span>) <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;hello&#34;</span>
+
+    <span style=color:#75715e># close</span>
+    await communicator<span style=color:#f92672>.</span>disconnect()
+</code></pre></div><h3 id=chat-client>Chat client</h3><p><code>assets/src/components/ChatRoom.vue</code> is use to send and receive message from Websocket server.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html>&lt;<span style=color:#f92672>template</span>&gt;
+  &lt;<span style=color:#f92672>div</span>&gt;
+    &lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;top&#34;</span>&gt;&lt;<span style=color:#f92672>span</span>&gt;&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;name&#34;</span>&gt;#{{ roomName }}&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>div</span>&gt;
+    &lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;chat active-chat&#34;</span>&gt;
+      &lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;conversation-start&#34;</span>&gt;
+        &lt;<span style=color:#f92672>span</span>&gt;Today, 6:48 AM&lt;/<span style=color:#f92672>span</span>&gt;
+      &lt;/<span style=color:#f92672>div</span>&gt;
+      &lt;<span style=color:#f92672>div</span>
+        <span style=color:#a6e22e>v-for</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;(message, index) in messages&#34;</span>
+        <span style=color:#a6e22e>:key</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;index&#34;</span>
+        <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;bubble text&#34;</span>
+      &gt;
+        {{ message }}
+      &lt;/<span style=color:#f92672>div</span>&gt;
+    &lt;/<span style=color:#f92672>div</span>&gt;
+    &lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;write&#34;</span>&gt;
+      &lt;<span style=color:#f92672>a</span>
+        <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;javascript:;&#34;</span>
+        <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;write-link attach&#34;</span>
+      &gt;&lt;<span style=color:#f92672>i</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;fas fa-paperclip&#34;</span>&gt;&lt;/<span style=color:#f92672>i</span>&gt;&lt;/<span style=color:#f92672>a</span>&gt;
+      &lt;<span style=color:#f92672>input</span>
+        <span style=color:#a6e22e>type</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;text&#34;</span>
+        <span style=color:#960050;background-color:#1e0010>@</span><span style=color:#a6e22e>keyup</span><span style=color:#960050;background-color:#1e0010>.</span><span style=color:#a6e22e>enter</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;sendMessage()&#34;</span>
+        <span style=color:#a6e22e>v-model</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;message&#34;</span>
+        <span style=color:#a6e22e>placeholder</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Send a message...&#34;</span>
+      /&gt;
+      &lt;<span style=color:#f92672>a</span>
+        <span style=color:#960050;background-color:#1e0010>@</span><span style=color:#a6e22e>click</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;sendMessage()&#34;</span>
+        <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;javascript:;&#34;</span>
+        <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;write-link send&#34;</span>
+      &gt;
+        &lt;<span style=color:#f92672>i</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;far fa-paper-plane&#34;</span>&gt;&lt;/<span style=color:#f92672>i</span>&gt;
+      &lt;/<span style=color:#f92672>a</span>&gt;
+      &lt;<span style=color:#f92672>a</span>
+        <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;javascript:;&#34;</span>
+        <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;write-link smiley&#34;</span>
+      &gt;
+        &lt;<span style=color:#f92672>i</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;far fa-smile&#34;</span>&gt;&lt;/<span style=color:#f92672>i</span>&gt;
+      &lt;/<span style=color:#f92672>a</span>&gt;
+    &lt;/<span style=color:#f92672>div</span>&gt;
+  &lt;/<span style=color:#f92672>div</span>&gt;
+&lt;/<span style=color:#f92672>template</span>&gt;
+
+&lt;<span style=color:#f92672>script</span> <span style=color:#a6e22e>lang</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;ts&#34;</span>&gt;
+<span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>Component</span>, <span style=color:#a6e22e>Prop</span>, <span style=color:#a6e22e>Vue</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;vue-property-decorator&#34;</span>;
+
+<span style=color:#960050;background-color:#1e0010>@</span><span style=color:#a6e22e>Component</span>
+<span style=color:#66d9ef>export</span> <span style=color:#66d9ef>default</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>ChatRoom</span> <span style=color:#66d9ef>extends</span> <span style=color:#a6e22e>Vue</span> {
+  <span style=color:#960050;background-color:#1e0010>@</span><span style=color:#a6e22e>Prop</span>() <span style=color:#66d9ef>private</span> <span style=color:#a6e22e>roomName</span><span style=color:#f92672>!:</span> <span style=color:#a6e22e>string</span>;
+
+  <span style=color:#a6e22e>messages</span><span style=color:#f92672>:</span> Array<span style=color:#f92672>&lt;</span><span style=color:#a6e22e>string</span><span style=color:#f92672>&gt;</span> <span style=color:#f92672>=</span> [];
+  <span style=color:#a6e22e>chatSocket</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>WebSocket</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>WebSocket</span>(
+    <span style=color:#e6db74>`ws://</span><span style=color:#e6db74>${</span>window.<span style=color:#a6e22e>location</span>.<span style=color:#a6e22e>host</span><span style=color:#e6db74>}</span><span style=color:#e6db74>/ws/chat/</span><span style=color:#e6db74>${</span><span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>roomName</span><span style=color:#e6db74>}</span><span style=color:#e6db74>/`</span>
+  );
+  <span style=color:#a6e22e>message</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>string</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;&#34;</span>;
+
+  <span style=color:#a6e22e>mounted</span>() {
+    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>chatSocket</span>.<span style=color:#a6e22e>onmessage</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>e</span> =&gt; {
+      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>data</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>JSON</span>.<span style=color:#a6e22e>parse</span>(<span style=color:#a6e22e>e</span>.<span style=color:#a6e22e>data</span>);
+      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>message</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>data</span>.<span style=color:#a6e22e>message</span>;
+      <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>messages</span>.<span style=color:#a6e22e>push</span>(<span style=color:#a6e22e>message</span>);
+    };
+
+    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>chatSocket</span>.<span style=color:#a6e22e>onclose</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>e</span> =&gt; {
+      <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>error</span>(<span style=color:#e6db74>&#34;chat socket closed unexpectedly!&#34;</span>);
+    };
+  }
+
+  <span style=color:#a6e22e>sendMessage</span>()<span style=color:#f92672>:</span> <span style=color:#66d9ef>void</span> {
+    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>chatSocket</span>.<span style=color:#a6e22e>send</span>(
+      <span style=color:#a6e22e>JSON</span>.<span style=color:#a6e22e>stringify</span>({
+        <span style=color:#a6e22e>message</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>message</span>
+      })
+    );
+
+    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>message</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;&#34;</span>;
+  }
+}
+&lt;/<span style=color:#f92672>script</span>&gt;
+
+&lt;<span style=color:#f92672>style</span> <span style=color:#a6e22e>lang</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;scss&#34;</span>&gt;
+@<span style=color:#66d9ef>import</span> <span style=color:#e6db74>&#34;@/assets/scss/app.scss&#34;</span>;
+&lt;/<span style=color:#f92672>style</span>&gt;
+</code></pre></div><h2 id=conclusion>Conclusion</h2><p>This is just a simple chat application, if you love this stack then you can update the code to build more features. Thanks for reading!</p></p></div><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"cozi-dev"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a><div class=page-footer><hr class=footer-divider><a class=tag href=/tags/django>#django</a>
+<a class=tag href=/tags/vue>#vue</a>
+<a class=tag href=/tags/websocket>#websocket</a>
+<a class=tag href=/tags/chat>#chat</a>
+<a class=tag href=/tags/channels>#channels</a></div></div><footer class=footer-mobile><div class=social-icons></div><div class=footer-mobile-links><p class=credits>Built with <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/kimcc/hugo-theme-noteworthy target=_blank rel=noopener>Noteworthy</a></p></div><script src=https://cozi.dev/js/main.min.fa5c2b23e07b5d9bfad267a52b4b24fdb053e6fb7524993383594926a3ac270c.js integrity="sha256-+lwrI+B7XZv60melK0sk/bBT5vt1JJkzg1lJJqOsJww=" crossorigin=anonymous></script><script async src="https://sdk.owids.com/js/app.js#id=bqnb4q1ba1fujo6isg10"></script></footer></body></html>
