@@ -36,7 +36,7 @@ The CPU i5 (4 cores 8 threads) is definitely enough for me. Especially, it has g
 
 I opened around 20 Chrome tabs, 5 docker containers, 3 node dev servers, 2 VS Code projects, some other macOS apps, the RAM used amount is around 4.5GB, I don't need to worry about the memory for now 😆
 
-{{< resize-image src="htop.png" >}}
+{{< resize-image src="htop.jpg" >}}
 
 ## High temperature
 
