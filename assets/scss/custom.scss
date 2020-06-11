@@ -13,6 +13,10 @@ img {
 
 .highlight {
   margin: 0 0 1em;
+
+  td > pre {
+    overflow: hidden;
+  }
 }
 
 .credits {
