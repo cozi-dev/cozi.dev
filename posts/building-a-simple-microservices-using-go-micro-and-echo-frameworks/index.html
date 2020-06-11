@@ -1,0 +1,130 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=format-detection content="telephone=no"><title>Building a simple microservices using Go Micro and Echo frameworks | Cozi</title><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#ff3db4><meta name=theme-color content="#ffffff"><link rel=stylesheet href=https://cozi.dev/css/main.min.15431d6c334f65809fe2bc329da3f2c81c6e3027ab1e25b56afb2bb85fa7fd64.css><link rel=stylesheet href=https://cozi.dev/scss/custom.min.c80973c5727111553f7a3610d0032580b6d5a0784cd92713d2f22abf9d1335c9.css></head><body><nav><header><div class=site-title><a href=/><img id=logo src=https://cozi.dev/images/logo.svg title=Cozi alt=logo></a></div></header><div class="toc bot"><small>3 mins read</small><h6 class=toc-label>What's on this page</h6><div class=toc-body><nav id=TableOfContents><ul><li><a href=#introduction>Introduction</a></li><li><a href=#building-our-first-microservices>Building our first microservices</a><ul><li><a href=#generate-services>Generate services</a></li><li><a href=#writing-your-first-echo-handler>Writing your first Echo handler</a></li><li><a href=#integrate-echo-with-go-micro>Integrate Echo with Go Micro</a></li><li><a href=#run-our-services>Run our services</a></li></ul></li><li><a href=#source-code>Source code</a></li><li><a href=#conclusion>Conclusion</a></li></ul></nav></div></div><div class=nav-menu><a class="color-link nav-link" href=/about/>About</a>
+<a class="color-link nav-link" href=/tags/>Tags</a>
+<a class="color-link nav-link" href=/archives/>Archives</a>
+<a class="color-link nav-link" href=https://cozi.dev/index.xml target=_blank rel=noopener type=application/rss+xml>RSS</a></div><footer class=footer><div class=social-icons></div><p class=credits>Built with <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a> &<br><a href=https://github.com/kimcc/hugo-theme-noteworthy target=_blank rel=noopener>Noteworthy</a></p></footer></nav><div id=content class=content-container><h1 class=post-title>Building a simple microservices using Go Micro and Echo frameworks</h1><time>June 10, 2020</time><div class="toc top"><small>3 mins read</small><h6 class=toc-label>What's on this page</h6><div class=toc-body><nav id=TableOfContents><ul><li><a href=#introduction>Introduction</a></li><li><a href=#building-our-first-microservices>Building our first microservices</a><ul><li><a href=#generate-services>Generate services</a></li><li><a href=#writing-your-first-echo-handler>Writing your first Echo handler</a></li><li><a href=#integrate-echo-with-go-micro>Integrate Echo with Go Micro</a></li><li><a href=#run-our-services>Run our services</a></li></ul></li><li><a href=#source-code>Source code</a></li><li><a href=#conclusion>Conclusion</a></li></ul></nav></div></div><div><p><h2 id=introduction>Introduction</h2><p>In this article, we will learn how to build a simple microservices using <a href=https://github.com/micro/go-micro target=_blank>Go Micro</a> and <a href=https://github.com/labstack/echo target=_blank>Echo</a> frameworks. And with Go Micro, building a microservices has never been easy than this before.</p><h2 id=building-our-first-microservices>Building our first microservices</h2><h3 id=generate-services>Generate services</h3><p>We will generate two services here: the first one is API gateway and the other one is a simple service to demonstrate calling between our services.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># gateway api</span>
+micro new --namespace<span style=color:#f92672>=</span>echo.micro --type<span style=color:#f92672>=</span>api gateway
+
+<span style=color:#75715e># baz service</span>
+micro new --namespace<span style=color:#f92672>=</span>echo.micro --type<span style=color:#f92672>=</span>service baz
+</code></pre></div><p><strong>Note:</strong> we use a custom namespace here <code>echo.micro</code>.</p><h3 id=writing-your-first-echo-handler>Writing your first Echo handler</h3><p>The handler simply calls and gets a response from the <code>baz</code> service.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// gateway/handler/hello.go
+</span><span style=color:#75715e></span><span style=color:#f92672>package</span> <span style=color:#a6e22e>handler</span>
+
+<span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;net/http&#34;</span>
+
+<span style=color:#75715e>// Hello handler
+</span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Hello</span>(<span style=color:#a6e22e>c</span> <span style=color:#a6e22e>echo</span>.<span style=color:#a6e22e>Context</span>) <span style=color:#66d9ef>error</span> {
+    <span style=color:#a6e22e>bazService</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>baz</span>.<span style=color:#a6e22e>NewBazService</span>(<span style=color:#e6db74>&#34;echo.micro.service.baz&#34;</span>, <span style=color:#a6e22e>client</span>.<span style=color:#a6e22e>DefaultClient</span>)
+    <span style=color:#a6e22e>res</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>bazService</span>.<span style=color:#a6e22e>Call</span>(<span style=color:#a6e22e>c</span>.<span style=color:#a6e22e>Request</span>().<span style=color:#a6e22e>Context</span>(), <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>baz</span>.<span style=color:#a6e22e>Request</span>{
+        <span style=color:#a6e22e>Name</span>: <span style=color:#e6db74>&#34;hello&#34;</span>,
+    })
+
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>echo</span>.<span style=color:#a6e22e>NewHTTPError</span>(<span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>StatusInternalServerError</span>, <span style=color:#a6e22e>err</span>)
+    }
+
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>c</span>.<span style=color:#a6e22e>JSON</span>(<span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>StatusOK</span>, <span style=color:#a6e22e>res</span>)
+}
+</code></pre></div><h3 id=integrate-echo-with-go-micro>Integrate Echo with Go Micro</h3><blockquote><p>Echo is a high performance, extensible, minimalist web framework for Go.</p></blockquote><p>By integrating with Echo, we will have both advantages of Echo and Go Micro.</p><div class=highlight><div style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 1
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 2
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 3
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 4
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 5
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 6
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 7
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 8
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 9
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">10
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">11
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">12
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">13
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">14
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">15
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">16
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">17
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">18
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">19
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">20
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">21
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">22
+</span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">23
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">24
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">25
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">26
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">27
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">28
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">29
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">30
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">31
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">32
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">33
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">34
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">35
+</span></span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">36
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">37
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">38
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">39
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">40
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f">41
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+
+<span style=color:#f92672>import</span> (
+    <span style=color:#e6db74>&#34;go-micro-echo/gateway/handler&#34;</span>
+
+    <span style=color:#a6e22e>log</span> <span style=color:#e6db74>&#34;github.com/micro/go-micro/v2/logger&#34;</span>
+    <span style=color:#e6db74>&#34;github.com/micro/go-micro/v2/web&#34;</span>
+
+    <span style=color:#e6db74>&#34;github.com/labstack/echo/v4&#34;</span>
+    <span style=color:#e6db74>&#34;github.com/labstack/echo/v4/middleware&#34;</span>
+)
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+    <span style=color:#75715e>// New Service
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>service</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>web</span>.<span style=color:#a6e22e>NewService</span>(
+        <span style=color:#a6e22e>web</span>.<span style=color:#a6e22e>Name</span>(<span style=color:#e6db74>&#34;echo.micro.api.gateway&#34;</span>),
+        <span style=color:#a6e22e>web</span>.<span style=color:#a6e22e>Version</span>(<span style=color:#e6db74>&#34;latest&#34;</span>),
+    )
+
+    <span style=color:#75715e>// Initialise service
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>service</span>.<span style=color:#a6e22e>Init</span>()
+
+<span style=display:block;width:100%;background-color:#3c3d38>    <span style=color:#75715e>// Echo instance
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style=color:#75715e></span>    <span style=color:#a6e22e>e</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>echo</span>.<span style=color:#a6e22e>New</span>()
+</span><span style=display:block;width:100%;background-color:#3c3d38>
+</span><span style=display:block;width:100%;background-color:#3c3d38>    <span style=color:#75715e>// Middleware
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style=color:#75715e></span>    <span style=color:#a6e22e>e</span>.<span style=color:#a6e22e>Use</span>(<span style=color:#a6e22e>middleware</span>.<span style=color:#a6e22e>Logger</span>())
+</span><span style=display:block;width:100%;background-color:#3c3d38>    <span style=color:#a6e22e>e</span>.<span style=color:#a6e22e>Use</span>(<span style=color:#a6e22e>middleware</span>.<span style=color:#a6e22e>Recover</span>())
+</span><span style=display:block;width:100%;background-color:#3c3d38>
+</span><span style=display:block;width:100%;background-color:#3c3d38>    <span style=color:#75715e>// Routes
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style=color:#75715e></span>    <span style=color:#a6e22e>g</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>e</span>.<span style=color:#a6e22e>Group</span>(<span style=color:#e6db74>&#34;/api&#34;</span>)
+</span><span style=display:block;width:100%;background-color:#3c3d38>    <span style=color:#a6e22e>g</span>.<span style=color:#a6e22e>GET</span>(<span style=color:#e6db74>&#34;/hello&#34;</span>, <span style=color:#a6e22e>handler</span>.<span style=color:#a6e22e>Hello</span>)
+</span><span style=display:block;width:100%;background-color:#3c3d38>
+</span><span style=display:block;width:100%;background-color:#3c3d38>    <span style=color:#75715e>// Register Handler
+</span></span><span style=display:block;width:100%;background-color:#3c3d38><span style=color:#75715e></span>    <span style=color:#a6e22e>service</span>.<span style=color:#a6e22e>Handle</span>(<span style=color:#e6db74>&#34;/&#34;</span>, <span style=color:#a6e22e>e</span>)
+</span>
+    <span style=color:#75715e>// Run service
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>service</span>.<span style=color:#a6e22e>Run</span>(); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#a6e22e>log</span>.<span style=color:#a6e22e>Fatal</span>(<span style=color:#a6e22e>err</span>)
+    }
+}</code></pre></td></tr></table></div></div><p>In the snippet above, from lines 23 to 35, we init Echo instance and assign to Go Micro service handle. But why?
+If you&rsquo;re looking at <code>service.Handle</code> method (line 35), the second argument type is <code>http.Handler</code> which is an interface:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Handler</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>ServeHTTP</span>(<span style=color:#a6e22e>ResponseWriter</span>, <span style=color:#f92672>*</span><span style=color:#a6e22e>Request</span>)
+}
+</code></pre></div><p>And our Echo instance implements <code>http.Handler</code> interface.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>e</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Echo</span>) <span style=color:#a6e22e>ServeHTTP</span>(<span style=color:#a6e22e>w</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ResponseWriter</span>, <span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Request</span>) {
+    <span style=color:#75715e>// ...
+</span><span style=color:#75715e></span>}
+</code></pre></div><p>That&rsquo;s why we can use the Echo instance on the Go Micro web service handle method.</p><h3 id=run-our-services>Run our services</h3><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># run baz service</span>
+go run baz/main.go
+
+<span style=color:#75715e># run gateway service</span>
+go run gateway/main.go
+
+<span style=color:#75715e># run micro api for namespace echo.micro</span>
+micro api --handler<span style=color:#f92672>=</span>http --namespace<span style=color:#f92672>=</span>echo.micro
+</code></pre></div><p>And now you can call API to test the result</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>curl http://localhost:8080/gateway/hello<span style=color:#ae81ff>\?</span>name<span style=color:#ae81ff>\=</span>World
+<span style=color:#f92672>{</span><span style=color:#e6db74>&#34;msg&#34;</span>:<span style=color:#e6db74>&#34;Hello World&#34;</span><span style=color:#f92672>}</span>
+</code></pre></div><img class=article-image src=/posts/building-a-simple-microservices-using-go-micro-and-echo-frameworks/go_micro_test.jpg alt><h2 id=source-code>Source code</h2><p>For more details, please checkout source code for this article at <a href=https://github.com/cozi-dev/go-micro-echo target=_blank>GitHub</a>.</p><h2 id=conclusion>Conclusion</h2><p>Now, we have done first step into the microservices world, there are many things we need to do but I hope with this step we can easily continue to explore more knowledge to apply to our real-world projects.</p></p></div><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"cozi-dev"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a><div class=page-footer><hr class=footer-divider><a class=tag href=/tags/go>#go</a>
+<a class=tag href=/tags/microservices>#microservices</a>
+<a class=tag href=/tags/go-micro>#go-micro</a>
+<a class=tag href=/tags/echo>#echo</a>
+<a class=tag href=/tags/framework>#framework</a></div></div><footer class=footer-mobile><div class=social-icons></div><div class=footer-mobile-links><p class=credits>Built with <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/kimcc/hugo-theme-noteworthy target=_blank rel=noopener>Noteworthy</a></p></div><script src=https://cozi.dev/js/main.min.fa5c2b23e07b5d9bfad267a52b4b24fdb053e6fb7524993383594926a3ac270c.js integrity="sha256-+lwrI+B7XZv60melK0sk/bBT5vt1JJkzg1lJJqOsJww=" crossorigin=anonymous></script><script async src="https://sdk.owids.com/js/app.js#id=bqnb4q1ba1fujo6isg10"></script></footer></body></html>
