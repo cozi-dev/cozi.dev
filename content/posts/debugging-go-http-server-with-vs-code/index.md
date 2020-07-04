@@ -119,7 +119,7 @@ Next, open your favorite terminal and enter `curl localhost:8080/Baz` for exampl
 
 ## Source code
 
-You can find source code for this article at [GitHub](https://github.com/cozi-dev/go-debugging).
+You can find source code for this article at {{< new-tab-link href="https://github.com/cozi-dev/go-debugging" >}}GitHub{{</ new-tab-link >}}.
 
 ## Conclusion
 
