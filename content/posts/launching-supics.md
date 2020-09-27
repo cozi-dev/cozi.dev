@@ -4,7 +4,7 @@ date: 2020-09-27T10:24:15+07:00
 tags: ["launch", "supics"]
 ---
 
-A few days ago, I launched <a href="https://supics.com" target="_blank">supics.com</a> which is my another side project that let people donwload/upload wallpapers for any devices.
+A few days ago, I launched <a href="https://supics.com" target="_blank">supics.com</a> which is my another side project that let people download/upload wallpapers for any devices.
 
 ## Why I built this site?
 
