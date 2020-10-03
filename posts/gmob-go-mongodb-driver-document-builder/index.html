@@ -1,0 +1,98 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=format-detection content="telephone=no"><title>Gmob - Go Mongodb Driver document builder | Cozi</title><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#ff3db4><meta name=theme-color content="#ffffff"><link rel=stylesheet href=https://cozi.dev/css/main.min.15431d6c334f65809fe2bc329da3f2c81c6e3027ab1e25b56afb2bb85fa7fd64.css><link rel=stylesheet href=https://cozi.dev/scss/custom.min.c80973c5727111553f7a3610d0032580b6d5a0784cd92713d2f22abf9d1335c9.css></head><body><nav><header><div class=site-title><a href=/><img id=logo src=https://cozi.dev/images/logo.svg title=Cozi alt=logo></a></div></header><div class="toc bot"><small>2 mins read</small><h6 class=toc-label>What's on this page</h6><div class=toc-body><nav id=TableOfContents><ul><li><a href=#conclusions>Conclusions</a></li><li><a href=#repository>Repository</a></li></ul></nav></div></div><div class=nav-menu><a class="color-link nav-link" href=/about/>About</a>
+<a class="color-link nav-link" href=/tags/>Tags</a>
+<a class="color-link nav-link" href=/archives/>Archives</a>
+<a class="color-link nav-link" href=https://cozi.dev/index.xml target=_blank rel=noopener type=application/rss+xml>RSS</a></div><footer class=footer><div class=social-icons></div><p class=credits>Built with <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a> &<br><a href=https://github.com/kimcc/hugo-theme-noteworthy target=_blank rel=noopener>Noteworthy</a></p></footer></nav><div id=content class=content-container><h1 class=post-title>Gmob - Go Mongodb Driver document builder</h1><time>October 3, 2020</time><div class="toc top"><small>2 mins read</small><h6 class=toc-label>What's on this page</h6><div class=toc-body><nav id=TableOfContents><ul><li><a href=#conclusions>Conclusions</a></li><li><a href=#repository>Repository</a></li></ul></nav></div></div><div><p><p>When I worked with <a href=https://github.com/mongodb/mongo-go-driver target=_blank>Mongo Go Driver</a>, it was complicate to make a search, or update query document(s) with dynamic conditions.</p><p>For example, collection <code>cars</code> that contains the following documents:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#f92672>{</span> _id: 1, name: <span style=color:#e6db74>&#34;abc1&#34;</span>, status: <span style=color:#e6db74>&#34;A&#34;</span>, qty: 50, category: <span style=color:#e6db74>&#34;sport&#34;</span>, createdAt: ISODate<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;2019-11-02T17:04:11.102Z&#34;</span><span style=color:#f92672>)</span> <span style=color:#f92672>}</span>
+<span style=color:#f92672>{</span> _id: 2, name: <span style=color:#e6db74>&#34;xyz1&#34;</span>, status: <span style=color:#e6db74>&#34;A&#34;</span>, qty: 100, category: <span style=color:#e6db74>&#34;sedan&#34;</span>, createdAt: ISODate<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;2019-10-01T17:04:11.102Z&#34;</span><span style=color:#f92672>)</span> <span style=color:#f92672>}</span>
+<span style=color:#f92672>{</span> _id: 3, name: <span style=color:#e6db74>&#34;xyz2&#34;</span>, status: <span style=color:#e6db74>&#34;D&#34;</span>, qty: 25, category: <span style=color:#e6db74>&#34;sport&#34;</span>, createdAt: ISODate<span style=color:#f92672>(</span><span style=color:#e6db74>&#34;2018-10-12T17:04:11.102Z&#34;</span><span style=color:#f92672>)</span> <span style=color:#f92672>}</span>
+</code></pre></div><p>Our model:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>...</span>
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Car</span> <span style=color:#66d9ef>struct</span> {
+    <span style=color:#a6e22e>ID</span> <span style=color:#66d9ef>int</span> <span style=color:#e6db74>`bson:&#34;_id&#34;`</span>
+    <span style=color:#a6e22e>Name</span> <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`bson:&#34;name&#34;`</span>
+    <span style=color:#a6e22e>Status</span> <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`bson:&#34;status&#34;`</span>
+    <span style=color:#a6e22e>Qty</span> <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`bson:&#34;qty&#34;`</span>
+    <span style=color:#a6e22e>Category</span> <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`bson:&#34;category&#34;`</span>
+    <span style=color:#a6e22e>CreatedAt</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span> <span style=color:#e6db74>`bson:&#34;createdAt&#34;`</span>
+}
+</code></pre></div><p>Then what are you gonna do if you want to find all the cars with a name/status/category, or even all of them? It may look like this:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>...</span>
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>cm</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>CarManager</span>) <span style=color:#a6e22e>FindCars</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>in</span> <span style=color:#a6e22e>Car</span>) (<span style=color:#a6e22e>cars</span> []<span style=color:#f92672>*</span><span style=color:#a6e22e>Car</span>, <span style=color:#a6e22e>err</span> <span style=color:#66d9ef>error</span>) {
+    <span style=color:#a6e22e>cars</span> = []<span style=color:#f92672>*</span><span style=color:#a6e22e>Car</span>{}
+    <span style=color:#a6e22e>filter</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>bson</span>.<span style=color:#a6e22e>M</span>{}
+
+    <span style=color:#75715e>// filter by name
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>in</span>.<span style=color:#a6e22e>Name</span> <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#34;&#34;</span> {
+        <span style=color:#a6e22e>filter</span>[<span style=color:#e6db74>&#34;name&#34;</span>] = <span style=color:#a6e22e>in</span>.<span style=color:#a6e22e>Name</span>
+    }
+
+    <span style=color:#75715e>// filter by status
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>in</span>.<span style=color:#a6e22e>Status</span> <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#34;&#34;</span> {
+        <span style=color:#a6e22e>filter</span>[<span style=color:#e6db74>&#34;status&#34;</span>] = <span style=color:#a6e22e>in</span>.<span style=color:#a6e22e>Status</span>
+    }
+
+    <span style=color:#75715e>// filter by category
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>in</span>.<span style=color:#a6e22e>Categroy</span> <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#34;&#34;</span> {
+        <span style=color:#a6e22e>filter</span>[<span style=color:#e6db74>&#34;category&#34;</span>] = <span style=color:#a6e22e>in</span>.<span style=color:#a6e22e>Categroy</span>
+    }
+
+    <span style=color:#a6e22e>cur</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>cm</span>.<span style=color:#a6e22e>collection</span>.<span style=color:#a6e22e>Find</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>filter</span>)
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
+    }
+
+    <span style=color:#75715e>// decode the result here
+</span><span style=color:#75715e></span>    <span style=color:#f92672>...</span>
+
+    <span style=color:#66d9ef>return</span>
+}
+</code></pre></div><p>It&rsquo;s boring, right? Then I wrote a simple util which called <a href=https://github.com/tungquach/gmob target=_blank>Gmob</a> to resolve this. Let&rsquo;s take a look:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>...</span>
+
+<span style=color:#f92672>import</span> (
+    <span style=color:#f92672>...</span>
+    <span style=color:#a6e22e>github</span>.<span style=color:#a6e22e>com</span><span style=color:#f92672>/</span><span style=color:#a6e22e>tungquach</span><span style=color:#f92672>/</span><span style=color:#a6e22e>gmob</span>
+    <span style=color:#f92672>...</span>
+)
+
+<span style=color:#f92672>...</span>
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>cm</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>CarManager</span>) <span style=color:#a6e22e>FindCars</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>in</span> <span style=color:#a6e22e>Car</span>) (<span style=color:#a6e22e>cars</span> []<span style=color:#f92672>*</span><span style=color:#a6e22e>Car</span>, <span style=color:#a6e22e>err</span> <span style=color:#66d9ef>error</span>) {
+    <span style=color:#a6e22e>cars</span> = []<span style=color:#f92672>*</span><span style=color:#a6e22e>Car</span>{}
+
+    <span style=color:#75715e>// Examples
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// in = Car{Name: &#34;abc1&#34;} =&gt; filter = bson.M{&#34;name&#34;: &#34;abc1&#34;}
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// in = Car{Name: &#34;acb1&#34;, Status: &#34;A&#34;, Category: &#34;sport&#34;} =&gt; filter = bson.M{&#34;name&#34;: &#34;abc1&#34;, &#34;status&#34;: &#34;A&#34;, &#34;category&#34;: &#34;sport&#34;}
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>filter</span>, <span style=color:#a6e22e>_</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>gmob</span>.<span style=color:#a6e22e>Build</span>(<span style=color:#a6e22e>in</span>)
+
+    <span style=color:#a6e22e>cur</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>cm</span>.<span style=color:#a6e22e>collection</span>.<span style=color:#a6e22e>Find</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>filter</span>)
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
+    }
+
+    <span style=color:#75715e>// decode the result here
+</span><span style=color:#75715e></span>    <span style=color:#f92672>...</span>
+
+    <span style=color:#66d9ef>return</span>
+}
+</code></pre></div><p>Now it looks more simple! And we can do the same for the update query:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>...</span>
+
+<span style=color:#f92672>import</span> (
+    <span style=color:#f92672>...</span>
+    <span style=color:#a6e22e>github</span>.<span style=color:#a6e22e>com</span><span style=color:#f92672>/</span><span style=color:#a6e22e>tungquach</span><span style=color:#f92672>/</span><span style=color:#a6e22e>gmob</span>
+    <span style=color:#f92672>...</span>
+)
+
+<span style=color:#f92672>...</span>
+
+<span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>cm</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>CarManager</span>) <span style=color:#a6e22e>UpdateCar</span>(<span style=color:#a6e22e>ctx</span> <span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Context</span>, <span style=color:#a6e22e>in</span> <span style=color:#a6e22e>Car</span>) (<span style=color:#a6e22e>err</span> <span style=color:#66d9ef>error</span>) {
+    <span style=color:#75715e>// Examples
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// in = Car{ID: 1, Name: &#34;abc1&#34;} =&gt; filter = bson.M{&#34;_id&#34;: 1, &#34;name&#34;: &#34;abc1&#34;}
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// in = Car{ID: 1, Name: &#34;acb1&#34;, Status: &#34;A&#34;, Category: &#34;sport&#34;} =&gt; filter = bson.M{&#34;_id&#34;: 1, &#34;name&#34;: &#34;abc1&#34;, &#34;status&#34;: &#34;A&#34;, &#34;category&#34;: &#34;sport&#34;}
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>setValues</span>, <span style=color:#a6e22e>_</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>gmob</span>.<span style=color:#a6e22e>Build</span>(<span style=color:#a6e22e>in</span>)
+    <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>cm</span>.<span style=color:#a6e22e>collection</span>.<span style=color:#a6e22e>UpdateOne</span>(<span style=color:#a6e22e>ctx</span>, <span style=color:#a6e22e>bson</span>.<span style=color:#a6e22e>M</span>{<span style=color:#e6db74>&#34;_id&#34;</span>: <span style=color:#a6e22e>in</span>.<span style=color:#a6e22e>ID</span>}, <span style=color:#a6e22e>bson</span>.<span style=color:#a6e22e>M</span>{<span style=color:#e6db74>&#34;$set&#34;</span>: <span style=color:#a6e22e>setValues</span>})
+
+    <span style=color:#66d9ef>return</span>
+}
+</code></pre></div><h2 id=conclusions>Conclusions</h2><p>I hope Gmob can help us stay away from boring code :) If you have any thoughts, please don&rsquo;t hesitate to give me feedback. Thank you so much!</p><h2 id=repository>Repository</h2><ul><li><a href=https://github.com/tungquach/gmob>https://github.com/tungquach/gmob</a></li></ul></p></div><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"cozi-dev"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a><div class=page-footer><hr class=footer-divider><a class=tag href=/tags/go>#go</a>
+<a class=tag href=/tags/mongodb>#mongodb</a>
+<a class=tag href=/tags/driver>#driver</a></div></div><footer class=footer-mobile><div class=social-icons></div><div class=footer-mobile-links><p class=credits>Built with <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/kimcc/hugo-theme-noteworthy target=_blank rel=noopener>Noteworthy</a></p></div><script src=https://cozi.dev/js/main.min.fa5c2b23e07b5d9bfad267a52b4b24fdb053e6fb7524993383594926a3ac270c.js integrity="sha256-+lwrI+B7XZv60melK0sk/bBT5vt1JJkzg1lJJqOsJww=" crossorigin=anonymous></script><script async src="https://sdk.owids.com/js/app.js#id=bqnb4q1ba1fujo6isg10"></script></footer></body></html>
