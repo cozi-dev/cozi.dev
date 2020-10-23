@@ -60,3 +60,5 @@ dist/css/index.css    236.82 KiB                 28.87 KiB
 
 That's it, you're ready to create an incoming awesome app :)\
 In the next article, I will try to modify Vue CLI to auto inject CSS files without doing it manually, maybe combine without hot reload too.
+
+[Updated] Here is the [part 2](/posts/vue-cli-4-build-statics-for-an-existing-app-part-2/) with simple configuration and hot reload.
