@@ -5,10 +5,12 @@
   {{ if eq .Type "posts"}}
   <div class="toc bot">
     <small>{{ partial "time-to-read.html" . }}</small>
+    {{ if ne .TableOfContents `<nav id="TableOfContents"></nav>` }}
     <h6 class="toc-label">What's on this page</h6>
     <div class="toc-body">
       {{ .TableOfContents }}
     </div>
+    {{ end }}
   </div>
   {{ end }}
 
