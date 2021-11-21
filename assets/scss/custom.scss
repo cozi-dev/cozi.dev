@@ -145,3 +145,8 @@ ul {
 a {
   color: darken($gray-light, 10);
 }
+
+#disqus_thread {
+  margin-top: 2em;
+  background: $dark-color;
+}

@@ -14,4 +14,4 @@ Hi there, thank you for visiting my blog! I’m a Vietnamese dad, husband, and p
 
 For any conversation, please drop me a message at this email address: <a href="mailto:hi@cozi.dev">hi@cozi.dev</a>
 
-P/s: I'm avaialble for hire
+P/s: I'm avaialble for hire :)
