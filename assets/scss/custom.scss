@@ -7,7 +7,7 @@ $gray-light: #ABABAB;
 $gray-dark: #5F5F5F;
 
 // NEW COLORS
-$dark-color: rgba(17, 24, 39, 1);
+$dark-color: #111827;
 $light-color: #b9b9b9;
 
 #logo {
@@ -108,9 +108,9 @@ img {
 
 // OVERRIDE NOTEWORTHY DARK MODE
 body {
+  // color-scheme: dark;
   color: $light-color;
-  background: $dark-color;
-  color-scheme: dark;
+  background-color: $dark-color;
 }
 
 h2 {
@@ -152,4 +152,8 @@ a {
   iframe {
     background-color: $dark-color;
   }
+}
+
+hr {
+  border-bottom: 1px solid lighten($dark-color, 10);
 }
