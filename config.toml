@@ -49,6 +49,12 @@ enableEmoji = true
 	weight = 2
 
 [[menu.main]]
+	identifier = "portfolio"
+	name = "Portfolio"
+	url = "/portfolio/"
+	weight = 3
+
+[[menu.main]]
 	name = "Archives"
 	identifier = "archives"
 	url = "/archives/"
