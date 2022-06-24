@@ -27,5 +27,11 @@ This is a simple Ansible playbook to use when I need to transfer files from the 
 
 After I ran this playbook, all files and directories inside `/home/old_user/app/backup` on the `old_server` will be transferred to `/home/new_user/app/backup` on the `new_server`.
 
+## Conclution
+
 This can save a lot of time compared to doing it manually.
 Please let me know in the comment section below if you have any questions.
+
+## References
+
+* https://docs.ansible.com/ansible/2.9/modules/synchronize_module.html
