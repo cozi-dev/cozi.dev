@@ -8,7 +8,7 @@ Here is the list of my active (not really) side projects, so much fail but I lov
 </p>
 
 
-{{ < rawhtml >}}
+{{< rawhtml >}}
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style type="text/tailwindcss">
