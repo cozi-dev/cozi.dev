@@ -8,7 +8,7 @@ Here is the list of my active (not really) side projects, so much fail but I lov
 </p>
 
 
-{{< rawhtml >}}
+{{ < rawhtml >}}
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style type="text/tailwindcss">
@@ -51,6 +51,7 @@ Here is the list of my active (not really) side projects, so much fail but I lov
                         <div class="tag">Ansible</div>
                         <div class="tag">Nginx</div>
                         <div class="tag">Drone CI</div>
+                        <div class="tag">Tailwind CSS</div>
                     </div>
                 </div>
             </div>
@@ -81,6 +82,7 @@ Here is the list of my active (not really) side projects, so much fail but I lov
                         <div class="tag">Docker</div>
                         <div class="tag">Envoy</div>
                         <div class="tag">Drone CI</div>
+                        <div class="tag">Tailwind CSS</div>
                     </div>
                 </div>
             </div>
@@ -115,6 +117,7 @@ Here is the list of my active (not really) side projects, so much fail but I lov
                         <div class="tag">Ansible</div>
                         <div class="tag">Envoy</div>
                         <div class="tag">Drone CI</div>
+                        <div class="tag">Tailwind CSS</div>
                     </div>
                 </div>
             </div>
@@ -147,6 +150,7 @@ Here is the list of my active (not really) side projects, so much fail but I lov
                         <div class="tag">Ansible</div>
                         <div class="tag">Envoy</div>
                         <div class="tag">Drone CI</div>
+                        <div class="tag">Bulma</div>
                     </div>
                 </div>
             </div>
