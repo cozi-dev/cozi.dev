@@ -158,6 +158,10 @@ hr {
   border-bottom: 1px solid lighten($dark-color, 10);
 }
 
-pre {
+pre, .file-tree li {
   background-color: #272822;
+}
+
+.code-annotated .highlight {
+  background-color: $dark-color;
 }

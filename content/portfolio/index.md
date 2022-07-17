@@ -17,12 +17,79 @@ Here is the list of my active (not really) side projects, so much fail but I lov
     background: #63BDA2;
 }
 
+.tag:hover {
+    color: white;
+    background: #3a9d7f;
+}
+
 .portfolio img {
     @apply border-none rounded-t-lg rounded-b-none;
 }
 </style>
 
 <div class="portfolio grid grid-cols-1 gap-6 my-6">
+    <!-- ewhyn -->
+    <div class="border border-gray-500 rounded-lg relative">
+        <div class="flex flex-wrap items-center">
+            <div class="w-full h-full object-cover object-top">
+                {{< resize-image class="w-full" src="ewhyn.png" >}}
+            </div>
+
+            <div class="w-full pt-4 flex flex-col justify-between p-6">
+                <div>
+                    <a href="https://ewhyn.com" target="_blank">
+                        <h2 class="font-bold text-xl text-gray-400 hover:text-gray-300">
+                            ewhyn -  ask question and find the best simple right answer
+                        </h2>
+                    </a>
+
+                    <div class="flex flex-wrap text-center pt-4">
+                        <div class="tag">Golang</div>
+                        <div class="tag">Vue.js</div>
+                        <div class="tag">Redis</div>
+                        <div class="tag">RabbitMQ</div>
+                        <div class="tag">Grpc Web</div>
+                        <div class="tag">Github</div>
+                        <div class="tag">Docker</div>
+                        <div class="tag">Ansible</div>
+                        <div class="tag">Envoy</div>
+                        <div class="tag">Drone CI</div>
+                        <div class="tag">Tailwind CSS</div>
+                        <div class="tag">i18n</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ewhyn -->
+
+    <!-- gmob -->
+    <div class="border border-gray-500 rounded-lg relative">
+        <div class="flex flex-wrap items-center">
+            <div class="w-full h-full object-cover object-top">
+                {{< resize-image class="w-full" src="open.png" >}}
+            </div>
+
+            <div class="w-full pt-4 flex flex-col justify-between p-6">
+                <div>
+                    <a href="https://github.com/tungquach/gmob" target="_blank">
+                        <h2 class="font-bold text-xl text-gray-400 hover:text-gray-300">
+                            Gmob - Go MongoDB driver document builder
+                        </h2>
+                    </a>
+
+                    <div class="flex flex-wrap text-center pt-4">
+                        <div class="tag">Golang</div>
+                        <div class="tag">MongoDB</div>
+                        <div class="tag">Open Source</div>
+                        <div class="tag">Github</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- gmob -->
+
     <!-- owids -->
     <div class="border border-gray-500 rounded-lg relative">
         <div class="flex flex-wrap items-center">
