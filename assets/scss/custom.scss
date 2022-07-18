@@ -165,3 +165,8 @@ pre, .file-tree li {
 .code-annotated .highlight {
   background-color: $dark-color;
 }
+
+.ticks li:before {
+  background-color: $teal;
+  border-radius: 100%;
+}
