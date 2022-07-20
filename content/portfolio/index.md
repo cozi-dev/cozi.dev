@@ -184,7 +184,7 @@ Here is the list of my active (not really) side projects, so much fail but I lov
                         <div class="tag">Ansible</div>
                         <div class="tag">Envoy</div>
                         <div class="tag">Drone CI</div>
-                        <div class="tag">Tailwind CSS</div>
+                        <div class="tag">Bulma</div>
                     </div>
                 </div>
             </div>
