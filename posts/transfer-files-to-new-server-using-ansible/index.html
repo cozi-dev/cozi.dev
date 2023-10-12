@@ -2,6 +2,7 @@
 <a class="color-link nav-link" href=/tags/>Tags</a>
 <a class="color-link nav-link" href=/archives/>Archives</a>
 <a class="color-link nav-link" href=/portfolio/>Portfolio</a>
+<a class="color-link nav-link" href=/hire-me/>Hire me</a>
 <a class="color-link nav-link" href=https://cozi.dev/index.xml target=_blank rel=noopener type=application/rss+xml>RSS</a></div><footer class=footer><div class=social-icons></div><p class=credits>Built with <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a> &<br><a href=https://github.com/kimcc/hugo-theme-noteworthy target=_blank rel=noopener>Noteworthy</a></p></footer></nav><div id=content class=content-container><h1 class=post-title>Transfer files to new server using Ansible</h1><time>June 24, 2022</time><div class="toc top"><small>1 min read</small><h6 class=toc-label>What's on this page</h6><div class=toc-body><nav id=TableOfContents><ul><li><a href=#conclution>Conclution</a></li><li><a href=#references>References</a></li></ul></nav></div></div><div class=post-content><p><p>This is a simple Ansible playbook to use when I need to transfer files from the current server to a new server.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml>---
 - <span style=color:#66d9ef>hosts</span>: old_server
   <span style=color:#66d9ef>remote_user</span>: root
