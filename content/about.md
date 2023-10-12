@@ -2,14 +2,16 @@
 title: "About"
 layout: "page"
 ---
-Hi there, thank you for visiting my blog! I’m a Vietnamese dad, husband, and programmer. Definitely not a native English speaker :)
+Hi there, welcome to my blog! I'm a Vietnamese software engineer, and I'm excited to share my experiences, thoughts, and knowledge with you :)
 
 ### Why I write this blog?
 
 * I want to improve my English.
-* I think maybe my articles can help someone.
-* A place to lookback because I can not remember everything.
+* To share valuable knowledge and insights.
+* A place to look back.
 
 ### Contact me
 
 For any conversation, please drop me a message at this email address: <a href="mailto:hi@cozi.dev">hi@cozi.dev</a>
+
+Thank you for visiting my blog, and I hope you find something valuable here. Your support and feedback mean the world to me.
