@@ -28,6 +28,76 @@ Here is the list of my active (not really) side projects, so much fail but I lov
 </style>
 
 <div class="portfolio grid grid-cols-1 gap-6 my-6">
+    <!-- naixu -->
+    <div class="border border-gray-500 rounded-lg relative">
+        <div class="flex flex-wrap items-center">
+            <div class="w-full h-full object-cover object-top">
+                {{< resize-image class="w-full" src="naixu.png" >}}
+            </div>
+
+            <div class="w-full pt-4 flex flex-col justify-between p-6">
+                <div>
+                    <a href="https://naixu.vn" target="_blank">
+                        <h2 class="font-bold text-xl text-gray-400 hover:text-gray-300">
+                            Nai Xừ - Share and discover the best products with the community
+                        </h2>
+                    </a>
+
+                    <div class="flex flex-wrap text-center pt-4">
+                        <div class="tag">Golang</div>
+                        <div class="tag">Nuxt</div>
+                        <div class="tag">Redis</div>
+                        <div class="tag">RabbitMQ</div>
+                        <div class="tag">Github</div>
+                        <div class="tag">Docker</div>
+                        <div class="tag">Ansible</div>
+                        <div class="tag">Traefik</div>
+                        <div class="tag">Drone CI</div>
+                        <div class="tag">Tailwind CSS</div>
+                        <div class="tag">Naive UI</div>
+                        <div class="tag">i18n</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- naixu -->
+
+    <!-- qrzam -->
+    <div class="border border-gray-500 rounded-lg relative">
+        <div class="flex flex-wrap items-center">
+            <div class="w-full h-full object-cover object-top">
+                {{< resize-image class="w-full" src="qrzam.jpeg" >}}
+            </div>
+
+            <div class="w-full pt-4 flex flex-col justify-between p-6">
+                <div>
+                    <a href="https://qrzam.com" target="_blank">
+                        <h2 class="font-bold text-xl text-gray-400 hover:text-gray-300">
+                            QR Zam - Unlock your unique potential with QR codes
+                        </h2>
+                    </a>
+
+                    <div class="flex flex-wrap text-center pt-4">
+                        <div class="tag">Golang</div>
+                        <div class="tag">PHP</div>
+                        <div class="tag">Nuxt</div>
+                        <div class="tag">Redis</div>
+                        <div class="tag">RabbitMQ</div>
+                        <div class="tag">Github</div>
+                        <div class="tag">Docker</div>
+                        <div class="tag">Ansible</div>
+                        <div class="tag">Traefik</div>
+                        <div class="tag">Drone CI</div>
+                        <div class="tag">Tailwind CSS</div>
+                        <div class="tag">i18n</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- qrzam -->
+
     <!-- ewhyn -->
     <div class="border border-gray-500 rounded-lg relative">
         <div class="flex flex-wrap items-center">
@@ -39,7 +109,7 @@ Here is the list of my active (not really) side projects, so much fail but I lov
                 <div>
                     <a href="https://ewhyn.com" target="_blank">
                         <h2 class="font-bold text-xl text-gray-400 hover:text-gray-300">
-                            ewhyn -  ask question and find the best simple right answer
+                            ewhyn - ask question and find the best simple right answer
                         </h2>
                     </a>
 
