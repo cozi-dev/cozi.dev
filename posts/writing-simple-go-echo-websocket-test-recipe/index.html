@@ -1,9 +1,4 @@
-<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge,chrome=1"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=format-detection content="telephone=no"><title>Writing Simple Go Echo Websocket Test Recipe | Cozi</title><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/manifest.json><link rel=mask-icon href=/safari-pinned-tab.svg color=#ff3db4><meta name=theme-color content="#111827"><link rel=stylesheet href=https://cozi.dev/css/main.min.15431d6c334f65809fe2bc329da3f2c81c6e3027ab1e25b56afb2bb85fa7fd64.css><link rel=stylesheet href=https://cozi.dev/scss/custom.min.f3193f4379c959aff6882e30608bcfefba5471f4f3cc8b192fce13c2be40e788.css></head><body><nav><header><div class=site-title><a href=/><img id=logo src=https://cozi.dev/images/logo_light.svg title=Cozi alt=logo></a></div></header><div class="toc bot"><small>2 mins read</small><h6 class=toc-label>What's on this page</h6><div class=toc-body><nav id=TableOfContents><ul><li><a href=#introduction>Introduction</a></li><li><a href=#lets-get-started>Let&rsquo;s get started</a><ul><li><a href=#writing-a-simple-handler>Writing a simple handler</a></li><li><a href=#implement-test>Implement test</a></li></ul></li><li><a href=#source-code>Source code</a></li><li><a href=#conclusion>Conclusion</a></li></ul></nav></div></div><div class=nav-menu><a class="color-link nav-link" href=/about/>About</a>
-<a class="color-link nav-link" href=/tags/>Tags</a>
-<a class="color-link nav-link" href=/archives/>Archives</a>
-<a class="color-link nav-link" href=/portfolio/>Portfolio</a>
-<a class="color-link nav-link" href=/hire-me/>Hire me</a>
-<a class="color-link nav-link" href=https://cozi.dev/index.xml target=_blank rel=noopener type=application/rss+xml>RSS</a></div><footer class=footer><div class=social-icons></div><p class=credits>Built with <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a> &<br><a href=https://github.com/kimcc/hugo-theme-noteworthy target=_blank rel=noopener>Noteworthy</a></p></footer></nav><div id=content class=content-container><h1 class=post-title>Writing Simple Go Echo Websocket Test Recipe</h1><time>May 5, 2020</time><div class="toc top"><small>2 mins read</small><h6 class=toc-label>What's on this page</h6><div class=toc-body><nav id=TableOfContents><ul><li><a href=#introduction>Introduction</a></li><li><a href=#lets-get-started>Let&rsquo;s get started</a><ul><li><a href=#writing-a-simple-handler>Writing a simple handler</a></li><li><a href=#implement-test>Implement test</a></li></ul></li><li><a href=#source-code>Source code</a></li><li><a href=#conclusion>Conclusion</a></li></ul></nav></div></div><div class=post-content><p><h2 id=introduction>Introduction</h2><p>Today, I&rsquo;ll show you how I set up a simple test for WebSocket using <a href=https://github.com/gorilla/websocket>gorilla/websocket</a> in <a href=https://github.com/labstack/echo>Echo</a> framework and how it makes me more confident with my code 😄</p><h2 id=lets-get-started>Let&rsquo;s get started</h2><h3 id=writing-a-simple-handler>Writing a simple handler</h3><p>The handler just simply says hello to the client (<code>Hello, Client!</code>) and reads the message from the client.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// websocket.go
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Writing Simple Go Echo Websocket Test Recipe &#183; Cozi</title><meta name=description content><link rel=stylesheet href=/scss/main.min.css><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><script src=/js/main.min.js defer></script><meta property="og:title" content="Writing Simple Go Echo Websocket Test Recipe"><meta property="og:description" content="Introduction Today, I&rsquo;ll show you how I set up a simple test for WebSocket using gorilla/websocket in Echo framework and how it makes me more confident with my code 😄"><meta property="og:type" content="article"><meta property="og:url" content="https://cozi.dev/posts/writing-simple-go-echo-websocket-test-recipe/"><meta property="article:published_time" content="2020-05-05T22:37:57+07:00"><meta property="article:modified_time" content="2020-05-05T22:37:57+07:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Writing Simple Go Echo Websocket Test Recipe"><meta name=twitter:description content="Introduction Today, I&rsquo;ll show you how I set up a simple test for WebSocket using gorilla/websocket in Echo framework and how it makes me more confident with my code 😄"><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest></head><body><header class=site-header><div class=header-content><div class=nav-wrapper><div class=site-title><a href=https://cozi.dev/ class=logo-container><img class=logo src=https://cozi.dev/images/logo_light.svg title=Cozi alt=Cozi></a></div><nav class=main-nav><ul><li><a href=/about/>About</a></li><li><a href=/posts/>Posts</a></li><li><a href=/tags/>Tags</a></li><li><a href=/portfolio/>Portfolio</a></li><li><a href=/archives/>Archives</a></li><li><a href=/hire-me/>Hire me</a></li><li><button id=theme-toggle class=theme-toggle aria-label="Toggle dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button></li></ul></nav></div><button id=mobile-menu-toggle class=mobile-menu-toggle aria-label="Toggle menu" aria-expanded=false><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div></header><div class=container><main class=main><div class=content><h1 class=post-title>Writing Simple Go Echo Websocket Test Recipe</h1><time>May 5, 2020</time><div class="toc top"><small>2 mins read</small><h6 class=toc-label>What's on this page</h6><div class=toc-body><nav id=TableOfContents><ul><li><a href=#introduction>Introduction</a></li><li><a href=#lets-get-started>Let&rsquo;s get started</a><ul><li><a href=#writing-a-simple-handler>Writing a simple handler</a></li><li><a href=#implement-test>Implement test</a></li></ul></li><li><a href=#source-code>Source code</a></li><li><a href=#conclusion>Conclusion</a></li></ul></nav></div></div><div class=post-content><p><h2 id=introduction>Introduction</h2><p>Today, I&rsquo;ll show you how I set up a simple test for WebSocket using <a href=https://github.com/gorilla/websocket>gorilla/websocket</a> in <a href=https://github.com/labstack/echo>Echo</a> framework and how it makes me more confident with my code 😄</p><h2 id=lets-get-started>Let&rsquo;s get started</h2><h3 id=writing-a-simple-handler>Writing a simple handler</h3><p>The handler just simply says hello to the client (<code>Hello, Client!</code>) and reads the message from the client.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// websocket.go
 </span><span style=color:#75715e></span>
 <span style=color:#f92672>package</span> <span style=color:#a6e22e>websocket</span>
 
@@ -105,4 +100,82 @@ func (h *WsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 var d=document,s=d.createElement('script');s.async=true;s.src='//'+"cozi-dev"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a><div class=page-footer><hr class=footer-divider><a class=tag href=/tags/go>#go</a>
 <a class=tag href=/tags/echo>#echo</a>
 <a class=tag href=/tags/test>#test</a>
-<a class=tag href=/tags/websocket>#websocket</a></div></div><footer class=footer-mobile><div class=social-icons></div><div class=footer-mobile-links><p class=credits>Built with <a href=https://gohugo.io target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/kimcc/hugo-theme-noteworthy target=_blank rel=noopener>Noteworthy</a></p></div><script src=https://cozi.dev/js/main.min.fa5c2b23e07b5d9bfad267a52b4b24fdb053e6fb7524993383594926a3ac270c.js integrity="sha256-+lwrI+B7XZv60melK0sk/bBT5vt1JJkzg1lJJqOsJww=" crossorigin=anonymous></script><script async src="https://sdk.owids.com/js/app.js#id=bqnb4q1ba1fujo6isg10"></script></footer></body></html>
+<a class=tag href=/tags/websocket>#websocket</a></div></div><aside class=sidebar><div class=sidebar-section><h2 class=sidebar-heading>About</h2><p>Cozi is a place where I share my software development journey, exploring programming languages, frameworks, design patterns, and more.</p></div><div class=sidebar-section><h2 class=sidebar-heading>Recent Posts</h2><div class=recent-posts><div class=recent-post><a href=/posts/serving-aws-s3-private-content-with-golang-and-aws-sdk-for-go-v2/>Serving AWS S3 private content with Golang and AWS SDK for Go v2</a>
+<span class=recent-post-date>Feb 5, 2024</span></div><div class=recent-post><a href=/posts/setting-up-a-virtual-environment-with-vagrant-for-testing/>Setting up a virtual environment with Vagrant for testing</a>
+<span class=recent-post-date>Oct 11, 2023</span></div><div class=recent-post><a href=/posts/golang-create-combinations-from-n-arrays/>Golang Create Combinations From N Arrays</a>
+<span class=recent-post-date>Sep 24, 2022</span></div><div class=recent-post><a href=/posts/mongodb-query-get-n-records-of-each-group-aggregation/>MongoDB query get n records of each group (aggregation)</a>
+<span class=recent-post-date>Jul 4, 2022</span></div><div class=recent-post><a href=/posts/transfer-files-to-new-server-using-ansible/>Transfer files to new server using Ansible</a>
+<span class=recent-post-date>Jun 24, 2022</span></div></div></div><div class=sidebar-section><h2 class=sidebar-heading>Tags</h2><div class=tags><a href=/tags/announcement class=tag>announcement (1)</a>
+<a href=/tags/ansible class=tag>ansible (3)</a>
+<a href=/tags/api class=tag>api (1)</a>
+<a href=/tags/application class=tag>application (1)</a>
+<a href=/tags/aws class=tag>aws (1)</a>
+<a href=/tags/channels class=tag>channels (1)</a>
+<a href=/tags/chat class=tag>chat (1)</a>
+<a href=/tags/ci/cd class=tag>ci/cd (1)</a>
+<a href=/tags/cicd class=tag>cicd (1)</a>
+<a href=/tags/cli class=tag>cli (1)</a>
+<a href=/tags/combination class=tag>combination (1)</a>
+<a href=/tags/command class=tag>command (1)</a>
+<a href=/tags/component class=tag>component (1)</a>
+<a href=/tags/css class=tag>css (3)</a>
+<a href=/tags/darkmode class=tag>darkmode (1)</a>
+<a href=/tags/database class=tag>database (2)</a>
+<a href=/tags/debug class=tag>debug (1)</a>
+<a href=/tags/deployment class=tag>deployment (1)</a>
+<a href=/tags/devops class=tag>devops (2)</a>
+<a href=/tags/disk class=tag>disk (1)</a>
+<a href=/tags/django class=tag>django (1)</a>
+<a href=/tags/docker class=tag>docker (2)</a>
+<a href=/tags/driver class=tag>driver (1)</a>
+<a href=/tags/drone class=tag>drone (1)</a>
+<a href=/tags/echo class=tag>echo (2)</a>
+<a href=/tags/framework class=tag>framework (1)</a>
+<a href=/tags/git class=tag>git (1)</a>
+<a href=/tags/gitlab class=tag>gitlab (1)</a>
+<a href=/tags/go class=tag>go (8)</a>
+<a href=/tags/go-micro class=tag>go-micro (1)</a>
+<a href=/tags/golang class=tag>golang (1)</a>
+<a href=/tags/graceful-shutdown class=tag>graceful-shutdown (1)</a>
+<a href=/tags/html class=tag>html (1)</a>
+<a href=/tags/ide class=tag>ide (1)</a>
+<a href=/tags/iframe class=tag>iframe (1)</a>
+<a href=/tags/informercat class=tag>informercat (1)</a>
+<a href=/tags/insomnia class=tag>insomnia (1)</a>
+<a href=/tags/javascript class=tag>javascript (1)</a>
+<a href=/tags/json class=tag>json (1)</a>
+<a href=/tags/k8s class=tag>k8s (1)</a>
+<a href=/tags/launch class=tag>launch (2)</a>
+<a href=/tags/life class=tag>life (1)</a>
+<a href=/tags/macbook class=tag>macbook (1)</a>
+<a href=/tags/macos class=tag>macos (1)</a>
+<a href=/tags/microservices class=tag>microservices (1)</a>
+<a href=/tags/mongo class=tag>mongo (1)</a>
+<a href=/tags/mongodb class=tag>mongodb (2)</a>
+<a href=/tags/nosql class=tag>nosql (1)</a>
+<a href=/tags/online class=tag>online (1)</a>
+<a href=/tags/pre-processors class=tag>pre-processors (1)</a>
+<a href=/tags/query class=tag>query (1)</a>
+<a href=/tags/review class=tag>review (1)</a>
+<a href=/tags/s3 class=tag>s3 (1)</a>
+<a href=/tags/server class=tag>server (1)</a>
+<a href=/tags/ssh class=tag>ssh (1)</a>
+<a href=/tags/supics class=tag>supics (1)</a>
+<a href=/tags/tailwind class=tag>tailwind (1)</a>
+<a href=/tags/test class=tag>test (2)</a>
+<a href=/tags/tips class=tag>tips (1)</a>
+<a href=/tags/tool class=tag>tool (3)</a>
+<a href=/tags/vagrant class=tag>vagrant (1)</a>
+<a href=/tags/vim class=tag>vim (1)</a>
+<a href=/tags/virtualbox class=tag>virtualbox (1)</a>
+<a href=/tags/vm class=tag>vm (1)</a>
+<a href=/tags/vscode class=tag>vscode (1)</a>
+<a href=/tags/vue class=tag>vue (6)</a>
+<a href=/tags/vue-cli class=tag>vue-cli (1)</a>
+<a href=/tags/webpack class=tag>webpack (2)</a>
+<a href=/tags/websocket class=tag>websocket (2)</a>
+<a href=/tags/zero-downtime class=tag>zero-downtime (1)</a></div></div></aside></main><footer class=site-footer><div>&copy; 2025 Cozi</div><div>Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></div></footer></div><span class=article-tags><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><a href=/tags/go>go</a>
+<a href=/tags/echo>echo</a>
+<a href=/tags/test>test</a>
+<a href=/tags/websocket>websocket</a></span>
+<script async src="https://sdk.owids.com/js/app.js#id=bqnb4q1ba1fujo6isg10"></script></body></html>
