@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ if not .IsHome }}{{ .Title }} &middot; {{ end }}{{ .Site.Title }}</title>
+    <meta name="description" content="{{ if .IsHome }}{{ .Site.Params.description }}{{ else }}{{ .Description }}{{ end }}">
+    
+    {{ $style := resources.Get "scss/main.scss" | resources.ToCSS | resources.Minify }}
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    {{ $script := resources.Get "js/main.js" | resources.Minify }}
+    <script src="{{ $script.RelPermalink }}" defer></script>
+    
+    {{ range .AlternativeOutputFormats -}}
+    {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+    {{ end -}}
+    
+    {{ template "_internal/opengraph.html" . }}
+    {{ template "_internal/twitter_cards.html" . }}
+    
+    {{ if .Site.GoogleAnalytics }}
+    {{ template "_internal/google_analytics.html" . }}
+    {{ end }}
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-content">
+            <div class="nav-wrapper">
+                <div class="site-title">
+                    <a href="{{ .Site.BaseURL }}" class="logo-container">
+                        <img class="logo" src="{{ "images/logo_light.svg" | absURL }}" title="{{ .Site.Title }}" alt="{{ .Site.Title }}">
+                    </a>
+                </div>
+                
+                <nav class="main-nav">
+                    <ul>
+                        {{ $currentPage := . }}
+                        {{ range .Site.Menus.main }}
+                        <li>
+                            <a href="{{ .URL }}" {{ if or ($currentPage.IsMenuCurrent "main" .) ($currentPage.HasMenuCurrent "main" .) }}class="active"{{ end }}>
+                                {{ .Name }}
+                            </a>
+                        </li>
+                        {{ end }}
+                        <li>
+                            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <button id="mobile-menu-toggle" class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+        </div>
+    </header>
+    
+    <div class="container">
+        <main class="main">
+            <div class="content">
+                {{ block "main" . }}{{ end }}
+            </div>
+            
+            <aside class="sidebar">
+                {{ block "sidebar" . }}
+                <div class="sidebar-section">
+                    <h2 class="sidebar-heading">About</h2>
+                    <p>{{ .Site.Params.description | markdownify }}</p>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h2 class="sidebar-heading">Recent Posts</h2>
+                    <div class="recent-posts">
+                        {{ range first 5 (where .Site.RegularPages "Type" "in" .Site.Params.mainSections | default (slice "posts")) }}
+                        <div class="recent-post">
+                            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                            <span class="recent-post-date">{{ .Date.Format "Jan 2, 2006" }}</span>
+                        </div>
+                        {{ end }}
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h2 class="sidebar-heading">Tags</h2>
+                    <div class="tags">
+                        {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+                        <a href="{{ "/tags/" | relLangURL }}{{ $name | urlize }}" class="tag">{{ $name }} ({{ $taxonomy.Count }})</a>
+                        {{ end }}
+                    </div>
+                </div>
+                {{ end }}
+            </aside>
+        </main>
+        
+        <footer class="site-footer">
+            <div>
+                &copy; {{ now.Format "2006" }} {{ .Site.Title }}
+            </div>
+            <div>
+                Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>
+            </div>
+        </footer>
+    </div>
+
+    {{ if .Params.tags }}
+    <span class="article-tags">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+        {{ range .Params.tags }}
+        <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+        {{ end }}
+    </span>
+    {{ end }}
+
+    <script async src="https://sdk.owids.com/js/app.js#id=bqnb4q1ba1fujo6isg10"></script>
+</body>
+</html> 

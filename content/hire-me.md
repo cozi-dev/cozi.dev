@@ -2,26 +2,50 @@
 title: "Hire me"
 layout: "page"
 ---
-Are you in search of a dedicated software developer for your project? Look no further! I offer my expertise and experience to help you achieve your software development goals. Below, you'll find the services I provide and how to get in touch.
 
-## Services
+## Let's Build Something Amazing Together
 
-I specialize in a range of software development services, including but not limited to:
+I'm a seasoned software developer with expertise in modern web technologies, backend systems, and cloud-native solutions. My approach combines technical excellence with a deep understanding of business needs to create solutions that not only work flawlessly but also deliver real value.
 
-- **Custom Software Solutions:** Crafting unique software solutions to solve specific challenges.
+## What I Bring to the Table
 
-- **Backend Development:** Designing robust and efficient backend systems to support your applications.
+- **Full-Stack Development** — Crafting seamless experiences from frontend to backend using modern frameworks and best practices
+- **API Design & Implementation** — Building robust, scalable, and well-documented APIs that power your digital ecosystem
+- **Cloud Architecture** — Leveraging AWS, Docker, and Kubernetes to create scalable and resilient infrastructure
+- **Performance Optimization** — Identifying and resolving bottlenecks to create lightning-fast applications
+- **Technical Leadership** — Guiding teams with clear communication and collaborative problem-solving
 
-- **Web Development:** Creating responsive and user-friendly websites tailored to your needs.
+## My Favorite Technical Toolkit
 
-- **E-commerce Development:** Setting up and enhancing online stores for your business.
+```
+Backend: Golang, Python
+Frontend: Vue.js, Nuxt.js, Tailwind CSS, Naive UI
+Databases: PostgreSQL, MongoDB, Redis, MySQL
+DevOps: Docker, Kubernetes, Ansible, Terraform, CI/CD
+Cloud: AWS, Digital Ocean, GCP
+```
 
-## Portfolio
+## Work Process
 
-Want to see some of my previous work? Explore my [Portfolio](https://cozi.dev/portfolio/) to get a sense of the projects I've completed successfully. You'll find examples of my work that showcase my skills and capabilities.
+1. **Discovery** — Understanding your business objectives and technical requirements
+2. **Planning** — Creating a clear roadmap with milestones and deliverables
+3. **Implementation** — Building with clean, maintainable code and regular updates
+4. **Testing** — Ensuring quality through comprehensive testing
+5. **Deployment** — Smooth transition to production with minimal disruption
+6. **Support** — Ongoing maintenance and improvements
 
-## Contact
+## See My Work
 
-Ready to discuss your project or have questions? Please don't hesitate to get in touch. You can reach me by sending an email to [hi@cozi.dev](mailto:hi@cozi.dev). I'm here to answer your inquiries and provide guidance on how we can collaborate to bring your vision to life.
+Curious about my capabilities? Explore my [Portfolio](/portfolio/) to see projects that showcase my technical skills, problem-solving approach, and attention to detail.
 
-Thank you for considering me for your software development needs. I look forward to the opportunity to work with you and turn your ideas into reality.
+## Let's Connect
+
+Ready to discuss your project needs? I'm available for:
+
+- Full-stack development projects
+- Technical consulting
+- Code reviews and system architecture
+- Performance optimization
+- Legacy system modernization
+
+Reach out at [hi@cozi.dev](mailto:hi@cozi.dev) to start a conversation about how we can work together to bring your ideas to life.

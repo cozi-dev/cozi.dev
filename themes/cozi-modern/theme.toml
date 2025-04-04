@@ -1,0 +1,12 @@
+name = "Cozi-Modern"
+license = "MIT"
+licenselink = "https://github.com/cozidev/cozi-modern/blob/master/LICENSE"
+description = "A modern, minimal theme for a dev blog"
+homepage = "https://cozi.dev/"
+tags = ["blog", "responsive", "minimal", "modern", "dark mode"]
+features = ["responsive", "dark mode", "syntax highlighting", "blog"]
+min_version = "0.41.0"
+
+[author]
+name = "Cozi Dev"
+homepage = "https://cozi.dev"

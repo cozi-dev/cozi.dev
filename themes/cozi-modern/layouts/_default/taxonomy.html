@@ -1,0 +1,62 @@
+{{ define "main" }}
+<div class="list-page">
+    <header class="page-header">
+        <h1 class="page-title">{{ .Title }}</h1>
+        
+        {{ if eq .Kind "taxonomy" }}
+        <div class="tag-count">{{ len .Pages }} post{{ if gt (len .Pages) 1 }}s{{ end }}</div>
+        {{ end }}
+    </header>
+    
+    <div class="article-list">
+        {{ range .Paginator.Pages }}
+        <article class="article card">
+            <header class="article-header">
+                <h2 class="article-title">
+                    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                </h2>
+                <div class="article-meta">
+                    <span class="article-date">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        {{ .Date.Format "January 2, 2006" }}
+                    </span>
+                    
+                    {{ if .Params.tags }}
+                    <span class="article-tags">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                        {{ range .Params.tags }}
+                        <a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+                        {{ end }}
+                    </span>
+                    {{ end }}
+                </div>
+            </header>
+            
+            <div class="article-summary">
+                {{ if .Params.featured_image }}
+                <div class="featured-image">
+                    <img src="{{ .Params.featured_image }}" alt="{{ .Title }}">
+                </div>
+                {{ end }}
+                
+                <div class="summary">
+                    {{ if .Description }}
+                    {{ .Description | markdownify }}
+                    {{ else }}
+                    {{ .Summary }}
+                    {{ end }}
+                </div>
+                
+                {{ if .Truncated }}
+                <div class="read-more">
+                    <a href="{{ .RelPermalink }}" class="read-more-link">Read More →</a>
+                </div>
+                {{ end }}
+            </div>
+        </article>
+        {{ end }}
+    </div>
+    
+    {{ template "_internal/pagination.html" . }}
+</div>
+{{ end }} 
