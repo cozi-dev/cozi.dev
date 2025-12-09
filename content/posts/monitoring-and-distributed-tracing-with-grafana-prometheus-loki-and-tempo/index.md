@@ -86,7 +86,11 @@ For metrics, the flow looks like this:
     - **Latency** (p50, p95, p99)  
     - **Container/host resource usage** (from cAdvisor)
 
-This gives me the classic SRE‑style view: how fast, how often, and how broken things are.
+This gives us the classic SRE‑style view: how fast, how often, and how broken things are.
+
+{{< resize-image src="metrics1.png" >}}
+
+{{< resize-image src="metrics2.png" >}}
 
 ## Data Flow: Logs
 
@@ -115,6 +119,8 @@ Logs are still the best way to understand **what** a service thought it was doin
 
 Once you get used to label‑based log queries, it becomes very natural to drill into just the context you care about.
 
+{{< resize-image src="log.png" >}}
+
 ## Data Flow: Traces
 
 Even with good metrics and logs, it can still be hard to see how a single user request flows across many services. That’s where **tracing** comes in:
@@ -133,6 +139,8 @@ Even with good metrics and logs, it can still be hard to see how a single user r
     - Spot failing segments immediately.
 
 Traces are especially powerful when you have intermittent or high‑latency issues: they tell you exactly which segment of the request path misbehaved.
+
+{{< resize-image src="trace.png" >}}
 
 ## A Typical Developer Workflow
 
