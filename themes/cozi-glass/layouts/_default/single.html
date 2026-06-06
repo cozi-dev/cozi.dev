@@ -1,0 +1,65 @@
+{{ define "main" }}
+<article class="container post">
+    <header class="post-header">
+        <h1 class="post-title">{{ .Title }}</h1>
+        <div class="post-meta">
+            {{ if .Site.Params.showDate }}<time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>{{ end }}
+            {{ if .Site.Params.showReadingTime }}<span aria-hidden="true">·</span><span>{{ .ReadingTime }} min read</span>{{ end }}
+            {{ if and .Site.Params.showAuthor .Site.Params.author.name }}<span aria-hidden="true">·</span><span>{{ .Site.Params.author.name }}</span>{{ end }}
+        </div>
+        {{ if and .Site.Params.showTags .Params.tags }}
+        <div class="post-tags">
+            {{ range .Params.tags }}
+            <a class="chip" href="{{ printf "/tags/%s/" (. | urlize) | relURL }}">#{{ . }}</a>
+            {{ end }}
+        </div>
+        {{ end }}
+    </header>
+
+    {{/* empty TOC renders as bare <nav> ~40 chars; require real content */}}
+    {{ if gt (len .TableOfContents) 100 }}
+    <aside class="post-toc glass">
+        <p class="toc-label">On this page</p>
+        {{ .TableOfContents }}
+    </aside>
+    {{ end }}
+
+    <div class="post-body">
+        {{ .Content }}
+    </div>
+
+    {{ if .Site.Params.showShareButtons }}
+    <div class="post-share glass">
+        <span class="share-label">Share:</span>
+        <a href="{{ printf "https://twitter.com/intent/tweet?%s" (querify "url" .Permalink "text" .Title) }}" target="_blank" rel="noopener">Twitter</a>
+        <a href="{{ printf "https://www.linkedin.com/sharing/share-offsite/?%s" (querify "url" .Permalink) }}" target="_blank" rel="noopener">LinkedIn</a>
+        <button class="copy-link" data-url="{{ .Permalink }}" type="button">Copy link</button>
+    </div>
+    {{ end }}
+
+    {{ if .Site.Params.showPrevNextLinks }}
+    {{ if or .NextInSection .PrevInSection }}
+    <nav class="post-prevnext" aria-label="Post navigation">
+        {{ with .NextInSection }}
+        <a class="prevnext-card glass glass-hover" href="{{ .RelPermalink }}">
+            <span class="prevnext-label">← Newer</span>
+            <strong>{{ .Title }}</strong>
+        </a>
+        {{ else }}<span></span>{{ end }}
+        {{ with .PrevInSection }}
+        <a class="prevnext-card glass glass-hover is-next" href="{{ .RelPermalink }}">
+            <span class="prevnext-label">Older →</span>
+            <strong>{{ .Title }}</strong>
+        </a>
+        {{ else }}<span></span>{{ end }}
+    </nav>
+    {{ end }}
+    {{ end }}
+
+    {{ if .Site.Params.showComments }}
+    <div class="post-comments glass">
+        {{ template "_internal/disqus.html" . }}
+    </div>
+    {{ end }}
+</article>
+{{ end }}

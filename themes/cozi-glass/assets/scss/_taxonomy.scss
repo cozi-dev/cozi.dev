@@ -1,0 +1,12 @@
+.tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 28px;
+
+  .chip-count {
+    font-family: var(--font-mono);
+    font-size: 0.75em;
+    opacity: 0.7;
+  }
+}

@@ -1,0 +1,35 @@
+{{ define "main" }}
+<div class="container portfolio-page">
+    <header class="page-head">
+        <h1 class="page-title">{{ .Title }}</h1>
+        {{ with .Content }}<div class="page-intro">{{ . }}</div>{{ end }}
+    </header>
+
+    {{ $page := . }}
+    {{ $ongoing := where site.Data.portfolio.projects "status" "ongoing" }}
+    {{ $archived := where site.Data.portfolio.projects "status" "archived" }}
+
+    {{ with $ongoing }}
+    <section class="portfolio-section">
+        <h2 class="portfolio-section-title">Ongoing</h2>
+        <div class="portfolio-grid">
+            {{ range . }}{{ partial "portfolio-card.html" (dict "page" $page "project" .) }}{{ end }}
+        </div>
+    </section>
+    {{ end }}
+
+    {{ with $archived }}
+    <section class="portfolio-section is-archived">
+        <h2 class="portfolio-section-title">Archived</h2>
+        <div class="portfolio-grid">
+            {{ range . }}{{ partial "portfolio-card.html" (dict "page" $page "project" .) }}{{ end }}
+        </div>
+    </section>
+    {{ end }}
+
+    <p class="portfolio-contact glass">
+        If you like my work or have a job opportunity, feel free to reach out at
+        <a href="mailto:hi@cozi.dev">hi@cozi.dev</a>
+    </p>
+</div>
+{{ end }}

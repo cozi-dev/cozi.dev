@@ -1,0 +1,55 @@
+.hero {
+  padding: 64px 0 72px;
+  text-align: center;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--accent-2);
+  margin-bottom: 16px;
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  margin-bottom: 20px;
+}
+
+.hero-spark {
+  color: var(--accent);
+}
+
+.hero-description {
+  max-width: 620px;
+  margin: 0 auto 32px;
+  color: var(--text-muted);
+  font-size: 1.08rem;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 24px;
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .section-link {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    font-weight: 500;
+
+    &:hover {
+      color: var(--accent-2);
+    }
+  }
+}

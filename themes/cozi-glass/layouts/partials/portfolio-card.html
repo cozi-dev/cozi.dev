@@ -1,0 +1,17 @@
+{{ $page := .page }}
+{{ $project := .project }}
+<article class="project-card glass glass-hover">
+    <a class="project-link" href="{{ $project.url }}" target="_blank" rel="noopener">
+        {{ with $page.Resources.GetMatch $project.image }}
+        {{ $img := .Resize "800x webp q85" }}
+        <div class="project-image">
+            <img src="{{ $img.RelPermalink }}" alt="{{ $project.title }} screenshot" loading="lazy" width="{{ $img.Width }}" height="{{ $img.Height }}">
+        </div>
+        {{ end }}
+        <h3 class="project-title">{{ $project.title }}</h3>
+    </a>
+    <p class="project-description">{{ $project.description }}</p>
+    <div class="project-tags">
+        {{ range $project.tags }}<span class="chip">{{ . }}</span>{{ end }}
+    </div>
+</article>

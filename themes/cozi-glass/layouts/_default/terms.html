@@ -1,0 +1,12 @@
+{{ define "main" }}
+<div class="container terms-page">
+    <header class="page-head">
+        <h1 class="page-title">{{ .Title }}</h1>
+    </header>
+    <div class="tag-cloud glass">
+        {{ range .Data.Terms.ByCount }}
+        <a class="chip chip-lg" href="{{ .Page.RelPermalink }}">#{{ .Page.Title }} <span class="chip-count">{{ .Count }}</span></a>
+        {{ end }}
+    </div>
+</div>
+{{ end }}

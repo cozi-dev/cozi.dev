@@ -1,0 +1,25 @@
+{{ define "main" }}
+<section class="hero container">
+    <p class="hero-eyebrow">// software development journal</p>
+    <h1 class="hero-title">Hi, I'm <span class="gradient-text">{{ .Site.Params.author.name }}</span> <span class="hero-spark">✦</span></h1>
+    <div class="hero-description">{{ .Site.Params.description | markdownify }}</div>
+    <div class="hero-actions">
+        <a class="btn btn-primary" href="{{ "/posts/" | relURL }}">Read the blog</a>
+        <a class="btn btn-ghost" href="{{ "/hire-me/" | relURL }}">Hire me</a>
+    </div>
+</section>
+
+{{ if .Site.Params.showRecentPosts }}
+<section class="recent-posts container">
+    <div class="section-head">
+        <h2 class="section-title">Recent posts</h2>
+        <a class="section-link" href="{{ "/posts/" | relURL }}">All posts →</a>
+    </div>
+    <div class="post-grid">
+        {{ range first 6 (where .Site.RegularPages "Section" "in" .Site.Params.mainSections) }}
+        {{ partial "post-card.html" . }}
+        {{ end }}
+    </div>
+</section>
+{{ end }}
+{{ end }}

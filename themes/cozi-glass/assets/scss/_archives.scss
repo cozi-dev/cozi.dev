@@ -1,0 +1,40 @@
+.archive-year {
+  margin-bottom: 36px;
+
+  .archive-year-label {
+    font-size: 1.7rem;
+    margin-bottom: 14px;
+  }
+}
+
+.archive-list {
+  list-style: none;
+  padding: 10px 24px;
+
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    padding: 10px 0;
+
+    & + li {
+      border-top: 1px solid var(--glass-border);
+    }
+  }
+
+  time {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    width: 52px;
+  }
+
+  a {
+    color: var(--text);
+
+    &:hover {
+      color: var(--accent-2);
+    }
+  }
+}

@@ -1,7 +1,7 @@
 baseURL = "https://cozi.dev/"
 languageCode = "en-us"
 title = "Cozi"
-theme = "cozi-modern"
+theme = "cozi-glass"
 enableRobotsTXT = true
 paginate = 10                 # Set the number of posts to show before overflowing to the next page.
 summaryLength = 10            # Configure how long the post summary should be on the homepage.
@@ -17,17 +17,26 @@ enableEmoji = true
 [taxonomies]
 tag = "tags"
 
-[author]
-name = "tungquach"
+[params.author]
+name = "Tung Quach"
 avatar = "images/author-avatar.jpg"
 bio = "Software developer, writer, and open source enthusiast."
-twitter = "@yourtwitterhandle"
-github = "yourgithubhandle"
-linkedin = "yourlinkedinprofile"
+twitter = ""
+github = "tungquach"
+linkedin = ""
 
 # Set to false to disallow raw HTML in markdown files
 [markup.goldmark.renderer]
 unsafe = true
+
+[markup.highlight]
+noClasses = false
+lineNos = false
+guessSyntax = true
+
+[markup.tableOfContents]
+startLevel = 2
+endLevel = 3
 
 [params]
 math = false
@@ -37,9 +46,9 @@ description = "Cozi is a place where I share my software development journey, ex
 mainSections = ["posts"]
 
 # Social media links displayed in footer
-twitterURL = "https://twitter.com/yourtwitterhandle"
-githubURL = "https://github.com/yourgithubhandle"
-linkedinURL = "https://linkedin.com/in/yourlinkedinprofile"
+twitterURL = ""
+githubURL = "https://github.com/tungquach"
+linkedinURL = ""
 rssURL = "/index.xml"
 
 # Customize the homepage layout

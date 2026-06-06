@@ -3,19 +3,20 @@ title: "Hire me"
 layout: "page"
 ---
 
-## Let's Build Something Amazing Together
+## Work with me
 
-I'm a seasoned software developer with expertise in modern web technologies, backend systems, and cloud-native solutions. My approach combines technical excellence with a deep understanding of business needs to create solutions that not only work flawlessly but also deliver real value.
+I'm a backend-leaning full-stack engineer. I build APIs, services, and the cloud infra they run on - and I care just as much about whether it survives production as whether it looks good in a demo.
 
-## What I Bring to the Table
+## What I do
 
-- **Full-Stack Development** — Crafting seamless experiences from frontend to backend using modern frameworks and best practices
-- **API Design & Implementation** — Building robust, scalable, and well-documented APIs that power your digital ecosystem
-- **Cloud Architecture** — Leveraging AWS, Docker, and Kubernetes to create scalable and resilient infrastructure
-- **Performance Optimization** — Identifying and resolving bottlenecks to create lightning-fast applications
-- **Technical Leadership** — Guiding teams with clear communication and collaborative problem-solving
+- **Backend & APIs** - clean, documented services in Go and Python
+- **Cloud & infra** - AWS, Docker, Kubernetes; setups that scale and don't fall over
+- **Performance** - tracking down the bottlenecks that make things slow
+- **Full-stack** - Vue/Nuxt frontends when a project needs the whole thing
+- **Technical leadership** - straight talk, code review, architecture
+- **AI-assisted development** - I lean on tools like Claude Code to move faster and stay efficient, without cutting corners on quality
 
-## My Favorite Technical Toolkit
+## My go-to toolkit
 
 ```
 Backend: Golang, Python
@@ -25,27 +26,27 @@ DevOps: Docker, Kubernetes, Ansible, Terraform, CI/CD
 Cloud: AWS, Digital Ocean, GCP
 ```
 
-## Work Process
+## How I work
 
-1. **Discovery** — Understanding your business objectives and technical requirements
-2. **Planning** — Creating a clear roadmap with milestones and deliverables
-3. **Implementation** — Building with clean, maintainable code and regular updates
-4. **Testing** — Ensuring quality through comprehensive testing
-5. **Deployment** — Smooth transition to production with minimal disruption
-6. **Support** — Ongoing maintenance and improvements
+1. **Discovery** - Figure out what you're actually trying to build
+2. **Planning** - Map it out: milestones, deliverables, no surprises
+3. **Implementation** - Clean, maintainable code and regular check-ins
+4. **Testing** - Make sure it actually holds up
+5. **Deployment** - Ship to production without the drama
+6. **Support** - Stick around for maintenance and improvements
 
-## See My Work
+## See my work
 
-Curious about my capabilities? Explore my [Portfolio](/portfolio/) to see projects that showcase my technical skills, problem-solving approach, and attention to detail.
+Curious what I've built? Have a look at my [Portfolio](/portfolio/).
 
-## Let's Connect
+## Let's talk
 
-Ready to discuss your project needs? I'm available for:
+I'm around for:
 
-- Full-stack development projects
-- Technical consulting
-- Code reviews and system architecture
-- Performance optimization
+- Full-stack and backend builds
+- Technical consulting & architecture
+- Code reviews
+- Performance work
 - Legacy system modernization
 
-Reach out at [hi@cozi.dev](mailto:hi@cozi.dev) to start a conversation about how we can work together to bring your ideas to life.
+Got a project? Drop me a line at [hi@cozi.dev](mailto:hi@cozi.dev) - a few sentences about what you're building is enough to get started.

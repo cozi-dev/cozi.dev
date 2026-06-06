@@ -1,0 +1,11 @@
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-social">
+            {{ with .Site.Params.githubURL }}<a href="{{ . }}" target="_blank" rel="noopener">GitHub</a>{{ end }}
+            {{ with .Site.Params.twitterURL }}<a href="{{ . }}" target="_blank" rel="noopener">Twitter</a>{{ end }}
+            {{ with .Site.Params.linkedinURL }}<a href="{{ . }}" target="_blank" rel="noopener">LinkedIn</a>{{ end }}
+            {{ with .Site.Params.rssURL }}<a href="{{ . | relURL }}">RSS</a>{{ end }}
+        </div>
+        <p class="footer-copy">© {{ now.Year }} {{ .Site.Title }} · built with Hugo</p>
+    </div>
+</footer>

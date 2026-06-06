@@ -1,0 +1,8 @@
+name = "Cozi Glass"
+license = "MIT"
+description = "Dark-first glassmorphism theme for cozi.dev — frosted cards, violet/cyan glow, light/dark toggle"
+homepage = "https://cozi.dev"
+min_version = "0.120.0"
+
+[author]
+name = "tungquach"

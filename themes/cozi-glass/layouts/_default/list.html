@@ -1,0 +1,15 @@
+{{ define "main" }}
+<div class="container list-page">
+    <header class="page-head">
+        <h1 class="page-title">{{ .Title }}</h1>
+        {{ with .Content }}<div class="page-intro">{{ . }}</div>{{ end }}
+    </header>
+    <div class="post-list">
+        {{ $paginator := .Paginate .RegularPages }}
+        {{ range $paginator.Pages }}
+        {{ partial "post-card.html" . }}
+        {{ end }}
+    </div>
+    {{ partial "pagination.html" . }}
+</div>
+{{ end }}

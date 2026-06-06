@@ -1,0 +1,58 @@
+:root {
+  // brand — GitHub-style blue (dark defaults)
+  --accent: #1f6feb;
+  --accent-2: #58a6ff;
+  --gradient: linear-gradient(135deg, #1f6feb 0%, #58a6ff 100%);
+
+  // dark palette (default)
+  --bg: #0b0d14;
+  --bg-elevated: #11141f;
+  --text: #e2e6f0;
+  --text-muted: #9aa3b5;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-hover: rgba(255, 255, 255, 0.09);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  // ambient glow blobs (kept names; now blue, not violet/cyan)
+  --glow-violet: rgba(31, 111, 235, 0.22);
+  --glow-cyan: rgba(56, 166, 255, 0.14);
+  --code-bg: rgba(255, 255, 255, 0.04);
+  --code-border: rgba(255, 255, 255, 0.12);
+  --code-block-bg: #161b22;
+  --chip-text: #58a6ff;
+  --chip-bg: rgba(56, 166, 255, 0.12);
+  --chip-border: rgba(56, 166, 255, 0.28);
+  --mark-bg: rgba(56, 166, 255, 0.28);
+
+  // layout
+  --radius: 16px;
+  --radius-sm: 10px;
+  --container: 1080px;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", var(--font-body);
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+}
+
+[data-theme="light"] {
+  --accent: #0550ae;
+  --accent-2: #0969da;
+  --gradient: linear-gradient(135deg, #0969da 0%, #218bff 100%);
+
+  --bg: #eef1f7;
+  --bg-elevated: #ffffff;
+  --text: #1f2328;
+  --text-muted: #59636e;
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-bg-hover: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(20, 28, 48, 0.1);
+  --glass-shadow: 0 8px 32px rgba(31, 38, 65, 0.08);
+  --glow-violet: rgba(9, 105, 218, 0.1);
+  --glow-cyan: rgba(33, 139, 255, 0.08);
+  --code-bg: rgba(20, 28, 48, 0.06);
+  --code-border: #d0d7de;
+  --code-block-bg: #ffffff;
+  --chip-text: #0969da;
+  --chip-bg: rgba(9, 105, 218, 0.1);
+  --chip-border: rgba(9, 105, 218, 0.25);
+  --mark-bg: rgba(9, 105, 218, 0.18);
+}

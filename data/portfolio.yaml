@@ -1,0 +1,49 @@
+projects:
+  - title: "Nai Xừ"
+    url: https://naixu.vn
+    image: naixu.png
+    status: archived
+    description: Share and discover the best products with the community
+    tags: [Golang, Nuxt, Redis, RabbitMQ, Docker, Ansible]
+  - title: "QR Zam"
+    url: https://qrzam.com
+    image: qrzam.jpeg
+    status: ongoing
+    description: Unlock your unique potential with QR codes
+    tags: [Golang, PHP, Nuxt, Redis, Docker, i18n]
+  - title: "ewhyn"
+    url: https://ewhyn.com
+    image: ewhyn.png
+    status: archived
+    description: Ask questions and find the best simple right answers
+    tags: [Golang, Vue.js, Redis, Grpc Web, Docker]
+  - title: "Gmob"
+    url: https://github.com/tungquach/gmob
+    image: open.png
+    status: archived
+    description: Go MongoDB driver document builder
+    tags: [Golang, MongoDB, Open Source, Github]
+  - title: "Owids"
+    url: https://owids.com
+    image: owids.png
+    status: ongoing
+    description: Your Ultimate All-in-One Website Tool
+    tags: [Golang, Vue.js, Python, PHP, MySQL]
+  - title: "MyBoringTools"
+    url: https://myboringtools.com
+    image: myboringtools.png
+    status: archived
+    description: Let this tool do the boring job for you!
+    tags: [Golang, Vue.js, Wasm, Docker]
+  - title: "Supics"
+    url: https://supics.com
+    image: supics.png
+    status: archived
+    description: The best awesome wallpapers & pictures for any devices
+    tags: [Golang, Vue.js, Firebase, Azure CV]
+  - title: "Notezam"
+    url: https://notezam.com
+    image: notezam.png
+    status: archived
+    description: Keep, share & manage your snippets
+    tags: [Django, Nuxt, PostgreSQL, Redis]

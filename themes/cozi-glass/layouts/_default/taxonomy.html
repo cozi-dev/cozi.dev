@@ -1,0 +1,15 @@
+{{ define "main" }}
+<div class="container taxonomy-page">
+    <header class="page-head">
+        <h1 class="page-title">#{{ .Title }}</h1>
+        <p class="page-intro">{{ len .Pages }} post{{ if ne (len .Pages) 1 }}s{{ end }} tagged</p>
+    </header>
+    <div class="post-list">
+        {{ $paginator := .Paginate .Pages }}
+        {{ range $paginator.Pages }}
+        {{ partial "post-card.html" . }}
+        {{ end }}
+    </div>
+    {{ partial "pagination.html" . }}
+</div>
+{{ end }}
