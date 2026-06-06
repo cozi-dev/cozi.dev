@@ -1,140 +1,73 @@
-<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Debugging Go http server with VS Code &#183; Cozi</title><meta name=description content><link rel=stylesheet href=/scss/main.min.css><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><script src=/js/main.min.js defer></script><meta property="og:title" content="Debugging Go http server with VS Code"><meta property="og:description" content="Like the title said, in this article we will do debugging go application with VS Code and Go extension."><meta property="og:type" content="article"><meta property="og:url" content="https://cozi.dev/posts/debugging-go-http-server-with-vs-code/"><meta property="article:published_time" content="2020-06-28T22:56:42+07:00"><meta property="article:modified_time" content="2020-06-28T22:56:42+07:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Debugging Go http server with VS Code"><meta name=twitter:description content="Like the title said, in this article we will do debugging go application with VS Code and Go extension."><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest></head><body><header class=site-header><div class=header-content><div class=nav-wrapper><div class=site-title><a href=https://cozi.dev/ class=logo-container><img class=logo src=https://cozi.dev/images/logo_light.svg title=Cozi alt=Cozi></a></div><nav class=main-nav><ul><li><a href=/about/>About</a></li><li><a href=/posts/>Posts</a></li><li><a href=/tags/>Tags</a></li><li><a href=/portfolio/>Portfolio</a></li><li><a href=/archives/>Archives</a></li><li><a href=/hire-me/>Hire me</a></li><li><button id=theme-toggle class=theme-toggle aria-label="Toggle dark mode"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button></li></ul></nav></div><button id=mobile-menu-toggle class=mobile-menu-toggle aria-label="Toggle menu" aria-expanded=false><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div></header><div class=container><main class=main><div class=content><h1 class=post-title>Debugging Go http server with VS Code</h1><time>June 28, 2020</time><div class="toc top"><small>3 mins read</small><h6 class=toc-label>What's on this page</h6><div class=toc-body><nav id=TableOfContents><ul><li><a href=#setup-simple-application>Setup simple application</a></li><li><a href=#debugging>Debugging</a><ul><li><a href=#option-1-debugging-with-test>Option 1: Debugging with test</a></li><li><a href=#option-2-debug-with-http-request-using-dlv>Option 2: Debug with http request using dlv</a></li></ul></li><li><a href=#source-code>Source code</a></li><li><a href=#conclusion>Conclusion</a></li></ul></nav></div></div><div class=post-content><p><p>Like the title said, in this article we will do debugging go application with <a href=https://code.visualstudio.com/ target=_blank>VS Code</a> and <a href="https://marketplace.visualstudio.com/items?itemName=golang.go" target=_blank>Go extension</a>.</p><h2 id=setup-simple-application>Setup simple application</h2><p>We will create a simple http server that says hello</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// main.go
-</span><span style=color:#75715e></span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+<!doctype html><html lang=en-us data-theme=dark><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Debugging Go http server with VS Code · Cozi</title><meta name=description content="Like the title said, in this article we will do debugging go application with VS Code and Go extension."><script>(function(){var stored=localStorage.getItem("theme");var preferred=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.dataset.theme=stored||preferred;})();</script><link rel=stylesheet href=/scss/main.min.a772d7ba05a87b828ea811cea14e0fbe78a1183cbbf87d79877f4c096ffc4f71.css><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel=stylesheet><script src=/js/main.min.aac09ecbc6ce132ce26f9628c4504094e8b73bff58db5985bc44d1dd4a433d31.js defer></script><meta property="og:title" content="Debugging Go http server with VS Code"><meta property="og:description" content="Like the title said, in this article we will do debugging go application with VS Code and Go extension."><meta property="og:type" content="article"><meta property="og:url" content="https://cozi.dev/posts/debugging-go-http-server-with-vs-code/"><meta property="article:published_time" content="2020-06-28T22:56:42+07:00"><meta property="article:modified_time" content="2020-06-28T22:56:42+07:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Debugging Go http server with VS Code"><meta name=twitter:description content="Like the title said, in this article we will do debugging go application with VS Code and Go extension."></head><body><header class=site-header><div class="header-inner glass"><a class=site-logo href=/>cozi<span class=gradient-text>.dev</span></a><nav class=site-nav aria-label="Main navigation"><a class=nav-link href=/about/>About</a>
+<a class="nav-link is-active" href=/posts/>Posts</a>
+<a class=nav-link href=/tags/>Tags</a>
+<a class=nav-link href=/portfolio/>Portfolio</a>
+<a class=nav-link href=/archives/>Archives</a>
+<a class=nav-link href=/hire-me/>Hire me</a></nav><div class=header-actions><button class=theme-toggle type=button aria-label="Toggle color scheme"><svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4m11.4-11.4 1.4-1.4"/></svg><svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button>
+<button class=nav-burger type=button aria-label="Toggle menu" aria-expanded=false>
+<span></span><span></span><span></span></button></div></div></header><main class=site-main><article class="container post"><header class=post-header><h1 class=post-title>Debugging Go http server with VS Code</h1><div class=post-meta><time datetime=2020-06-28>June 28, 2020</time>
+<span aria-hidden=true>·</span><span>3 min read</span>
+<span aria-hidden=true>·</span><span>Tung Quach</span></div><div class=post-tags><a class=chip href=/tags/debug/>#debug</a>
+<a class=chip href=/tags/go/>#go</a>
+<a class=chip href=/tags/vscode/>#vscode</a></div></header><aside class="post-toc glass"><p class=toc-label>On this page</p><nav id=TableOfContents><ul><li><a href=#setup-simple-application>Setup simple application</a></li><li><a href=#debugging>Debugging</a><ul><li><a href=#option-1-debugging-with-test>Option 1: Debugging with test</a></li><li><a href=#option-2-debug-with-http-request-using-dlv>Option 2: Debug with http request using dlv</a></li></ul></li><li><a href=#source-code>Source code</a></li><li><a href=#conclusion>Conclusion</a></li></ul></nav></aside><div class=post-body><p>Like the title said, in this article we will do debugging go application with <a href=https://code.visualstudio.com/ target=_blank>VS Code</a> and <a href="https://marketplace.visualstudio.com/items?itemName=golang.go" target=_blank>Go extension</a>.</p><h2 id=setup-simple-application>Setup simple application</h2><p>We will create a simple http server that says hello</p><div class=highlight><pre class=chroma><code class=language-go data-lang=go><span class=c1>// main.go
+</span><span class=c1></span><span class=kn>package</span> <span class=nx>main</span>
 
-<span style=color:#f92672>import</span> (
-    <span style=color:#e6db74>&#34;fmt&#34;</span>
-    <span style=color:#e6db74>&#34;net/http&#34;</span>
-)
+<span class=kn>import</span> <span class=p>(</span>
+    <span class=s>&#34;fmt&#34;</span>
+    <span class=s>&#34;net/http&#34;</span>
+<span class=p>)</span>
 
-<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
-    <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>HandleFunc</span>(<span style=color:#e6db74>&#34;/&#34;</span>, <span style=color:#a6e22e>helloServer</span>)
-    <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ListenAndServe</span>(<span style=color:#e6db74>&#34;:8080&#34;</span>, <span style=color:#66d9ef>nil</span>)
-}
+<span class=kd>func</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+    <span class=nx>http</span><span class=p>.</span><span class=nf>HandleFunc</span><span class=p>(</span><span class=s>&#34;/&#34;</span><span class=p>,</span> <span class=nx>helloServer</span><span class=p>)</span>
+    <span class=nx>http</span><span class=p>.</span><span class=nf>ListenAndServe</span><span class=p>(</span><span class=s>&#34;:8080&#34;</span><span class=p>,</span> <span class=kc>nil</span><span class=p>)</span>
+<span class=p>}</span>
 
-<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>helloServer</span>(<span style=color:#a6e22e>w</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ResponseWriter</span>, <span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Request</span>) {
-    <span style=color:#a6e22e>name</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>r</span>.<span style=color:#a6e22e>URL</span>.<span style=color:#a6e22e>Path</span>[<span style=color:#ae81ff>1</span>:]
-    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Fprintf</span>(<span style=color:#a6e22e>w</span>, <span style=color:#e6db74>&#34;Hello, %s!&#34;</span>, <span style=color:#a6e22e>name</span>)
-}
-</code></pre></div><h2 id=debugging>Debugging</h2><p>For example, you may want to debug the value of the <code>name</code> variable from the application above then we have two options here to debug our http server.</p><h3 id=option-1-debugging-with-test>Option 1: Debugging with test</h3><h4 id=step-1-lets-write-our-test>Step 1: Let&rsquo;s write our test</h4><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// main_test.go
-</span><span style=color:#75715e></span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+<span class=kd>func</span> <span class=nf>helloServer</span><span class=p>(</span><span class=nx>w</span> <span class=nx>http</span><span class=p>.</span><span class=nx>ResponseWriter</span><span class=p>,</span> <span class=nx>r</span> <span class=o>*</span><span class=nx>http</span><span class=p>.</span><span class=nx>Request</span><span class=p>)</span> <span class=p>{</span>
+    <span class=nx>name</span> <span class=o>:=</span> <span class=nx>r</span><span class=p>.</span><span class=nx>URL</span><span class=p>.</span><span class=nx>Path</span><span class=p>[</span><span class=mi>1</span><span class=p>:]</span>
+    <span class=nx>fmt</span><span class=p>.</span><span class=nf>Fprintf</span><span class=p>(</span><span class=nx>w</span><span class=p>,</span> <span class=s>&#34;Hello, %s!&#34;</span><span class=p>,</span> <span class=nx>name</span><span class=p>)</span>
+<span class=p>}</span>
+</code></pre></div><h2 id=debugging>Debugging</h2><p>For example, you may want to debug the value of the <code>name</code> variable from the application above then we have two options here to debug our http server.</p><h3 id=option-1-debugging-with-test>Option 1: Debugging with test</h3><h4 id=step-1-lets-write-our-test>Step 1: Let&rsquo;s write our test</h4><div class=highlight><pre class=chroma><code class=language-go data-lang=go><span class=c1>// main_test.go
+</span><span class=c1></span><span class=kn>package</span> <span class=nx>main</span>
 
-<span style=color:#f92672>import</span> (
-    <span style=color:#e6db74>&#34;net/http&#34;</span>
-    <span style=color:#e6db74>&#34;net/http/httptest&#34;</span>
-    <span style=color:#e6db74>&#34;testing&#34;</span>
-)
+<span class=kn>import</span> <span class=p>(</span>
+    <span class=s>&#34;net/http&#34;</span>
+    <span class=s>&#34;net/http/httptest&#34;</span>
+    <span class=s>&#34;testing&#34;</span>
+<span class=p>)</span>
 
-<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Test_helloServer</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
-    <span style=color:#a6e22e>request</span>, <span style=color:#a6e22e>_</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>NewRequest</span>(<span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>MethodGet</span>, <span style=color:#e6db74>&#34;/Foo&#34;</span>, <span style=color:#66d9ef>nil</span>)
-    <span style=color:#a6e22e>response</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>httptest</span>.<span style=color:#a6e22e>NewRecorder</span>()
+<span class=kd>func</span> <span class=nf>Test_helloServer</span><span class=p>(</span><span class=nx>t</span> <span class=o>*</span><span class=nx>testing</span><span class=p>.</span><span class=nx>T</span><span class=p>)</span> <span class=p>{</span>
+    <span class=nx>request</span><span class=p>,</span> <span class=nx>_</span> <span class=o>:=</span> <span class=nx>http</span><span class=p>.</span><span class=nf>NewRequest</span><span class=p>(</span><span class=nx>http</span><span class=p>.</span><span class=nx>MethodGet</span><span class=p>,</span> <span class=s>&#34;/Foo&#34;</span><span class=p>,</span> <span class=kc>nil</span><span class=p>)</span>
+    <span class=nx>response</span> <span class=o>:=</span> <span class=nx>httptest</span><span class=p>.</span><span class=nf>NewRecorder</span><span class=p>()</span>
 
-    <span style=color:#a6e22e>helloServer</span>(<span style=color:#a6e22e>response</span>, <span style=color:#a6e22e>request</span>)
+    <span class=nf>helloServer</span><span class=p>(</span><span class=nx>response</span><span class=p>,</span> <span class=nx>request</span><span class=p>)</span>
 
-    <span style=color:#a6e22e>got</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>response</span>.<span style=color:#a6e22e>Body</span>.<span style=color:#a6e22e>String</span>()
-    <span style=color:#a6e22e>want</span> <span style=color:#f92672>:=</span> <span style=color:#e6db74>&#34;Hello, Foo!&#34;</span>
-    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>got</span> <span style=color:#f92672>!=</span> <span style=color:#a6e22e>want</span> {
-        <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;got %q, want %q&#34;</span>, <span style=color:#a6e22e>got</span>, <span style=color:#a6e22e>want</span>)
-    }
-}
+    <span class=nx>got</span> <span class=o>:=</span> <span class=nx>response</span><span class=p>.</span><span class=nx>Body</span><span class=p>.</span><span class=nf>String</span><span class=p>()</span>
+    <span class=nx>want</span> <span class=o>:=</span> <span class=s>&#34;Hello, Foo!&#34;</span>
+    <span class=k>if</span> <span class=nx>got</span> <span class=o>!=</span> <span class=nx>want</span> <span class=p>{</span>
+        <span class=nx>t</span><span class=p>.</span><span class=nf>Errorf</span><span class=p>(</span><span class=s>&#34;got %q, want %q&#34;</span><span class=p>,</span> <span class=nx>got</span><span class=p>,</span> <span class=nx>want</span><span class=p>)</span>
+    <span class=p>}</span>
+<span class=p>}</span>
 
-</code></pre></div><h4 id=step-2-add-breakpoint>Step 2: Add breakpoint</h4><p>Now we have our test for <code>helloServer</code>, next step we need to add a breakpoint right after this line <code>name := r.URL.Path[1:]</code> by click on the left of expect line number or move the pointer to the expect line number and press <code>F9</code> to toggle a breakpoint.</p><img class=article-image src=/posts/debugging-go-http-server-with-vs-code/add_breakpoint.jpg alt><h4 id=step-3-debug-test>Step 3: Debug test</h4><p>Finally, click on <code>debug test</code> to see the result:</p><img class=article-image src=/posts/debugging-go-http-server-with-vs-code/debug_test.jpg alt><p>Here, we can see the value of the <code>name</code> variable is <code>Foo</code> in the left panel or hover mouse on the <code>name</code> variable</p><img class=article-image src=/posts/debugging-go-http-server-with-vs-code/debug_result.jpg alt><h3 id=option-2-debug-with-http-request-using-dlv>Option 2: Debug with http request using dlv</h3><h4 id=step-1-install-dlv>Step 1: Install dlv</h4><p>Open the Command Palette (<code>Ctrl+Shift+P</code> or <code>Command+Shift+P</code>), select <code>Go: Install/Update Tools</code>, and select <code>dlv</code></p><h4 id=step-2-add-launch-configuration>Step 2: Add launch configuration</h4><p>Create <code>.vscode/launch.json</code> in your root project folder and put this content into it</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json>{
-    <span style=color:#f92672>&#34;version&#34;</span>: <span style=color:#e6db74>&#34;0.2.0&#34;</span>,
-    <span style=color:#f92672>&#34;configurations&#34;</span>: [
-        {
-            <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;Launch&#34;</span>,
-            <span style=color:#f92672>&#34;type&#34;</span>: <span style=color:#e6db74>&#34;go&#34;</span>,
-            <span style=color:#f92672>&#34;request&#34;</span>: <span style=color:#e6db74>&#34;launch&#34;</span>,
-            <span style=color:#f92672>&#34;mode&#34;</span>: <span style=color:#e6db74>&#34;auto&#34;</span>,
-            <span style=color:#f92672>&#34;program&#34;</span>: <span style=color:#e6db74>&#34;${fileDirname}&#34;</span>,
-            <span style=color:#f92672>&#34;env&#34;</span>: {},
-            <span style=color:#f92672>&#34;args&#34;</span>: []
-        }
-    ]
-}
-</code></pre></div><p><strong>Note:</strong> If your <code>main.go</code> file inside sub folder like <code>cmd/api/main.go</code>, you may want add this config to <code>launch.json</code> file to set current working directory to root project folder: <code>"cwd": "${workspaceRoot}"</code></p><h4 id=step-3-add-breakpoint>Step 3: Add breakpoint</h4><p>This step is the same as add breakpoint like <a href=#step-2-add-breakpoint>Option 1</a></p><h4 id=step-4-run-and-debug>Step 4: Run and Debug</h4><p>Open the <code>main.go</code> file and press <code>F5</code> and you ready to &ldquo;Go&rdquo; :)<br>Next, open your favorite terminal and enter <code>curl localhost:8080/Baz</code> for example. Now you can see the debug result:</p><img class=article-image src=/posts/debugging-go-http-server-with-vs-code/http_debug_result.jpg alt><h2 id=source-code>Source code</h2><p>You can find source code for this article at <a href=https://github.com/cozi-dev/go-debugging target=_blank>GitHub</a>.</p><h2 id=conclusion>Conclusion</h2><p>Above are two debug options for Go using VS Code which is very useful. For me, I prefer to cover as many tests as possible (Option 1), but when I need to debug a full flow of a request then Option 2 will be the best choice. And you? Which method do you use for debugging Go code?</p></p></div><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
-var d=document,s=d.createElement('script');s.async=true;s.src='//'+"cozi-dev"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a><div class=page-footer><hr class=footer-divider><a class=tag href=/tags/debug>#debug</a>
-<a class=tag href=/tags/go>#go</a>
-<a class=tag href=/tags/vscode>#vscode</a></div></div><aside class=sidebar><div class=sidebar-section><h2 class=sidebar-heading>About</h2><p>Cozi is a place where I share my software development journey, exploring programming languages, frameworks, design patterns, and more.</p></div><div class=sidebar-section><h2 class=sidebar-heading>Recent Posts</h2><div class=recent-posts><div class=recent-post><a href=/posts/monitoring-and-distributed-tracing-with-grafana-prometheus-loki-and-tempo/>Monitoring and Distributed Tracing with Grafana, Prometheus, Loki & Tempo</a>
-<span class=recent-post-date>Dec 1, 2025</span></div><div class=recent-post><a href=/posts/serving-aws-s3-private-content-with-golang-and-aws-sdk-for-go-v2/>Serving AWS S3 private content with Golang and AWS SDK for Go v2</a>
-<span class=recent-post-date>Feb 5, 2024</span></div><div class=recent-post><a href=/posts/setting-up-a-virtual-environment-with-vagrant-for-testing/>Setting up a virtual environment with Vagrant for testing</a>
-<span class=recent-post-date>Oct 11, 2023</span></div><div class=recent-post><a href=/posts/golang-create-combinations-from-n-arrays/>Golang Create Combinations From N Arrays</a>
-<span class=recent-post-date>Sep 24, 2022</span></div><div class=recent-post><a href=/posts/mongodb-query-get-n-records-of-each-group-aggregation/>MongoDB query get n records of each group (aggregation)</a>
-<span class=recent-post-date>Jul 4, 2022</span></div></div></div><div class=sidebar-section><h2 class=sidebar-heading>Tags</h2><div class=tags><a href=/tags/announcement class=tag>announcement (1)</a>
-<a href=/tags/ansible class=tag>ansible (3)</a>
-<a href=/tags/api class=tag>api (1)</a>
-<a href=/tags/application class=tag>application (1)</a>
-<a href=/tags/aws class=tag>aws (1)</a>
-<a href=/tags/channels class=tag>channels (1)</a>
-<a href=/tags/chat class=tag>chat (1)</a>
-<a href=/tags/ci/cd class=tag>ci/cd (1)</a>
-<a href=/tags/cicd class=tag>cicd (1)</a>
-<a href=/tags/cli class=tag>cli (1)</a>
-<a href=/tags/combination class=tag>combination (1)</a>
-<a href=/tags/command class=tag>command (1)</a>
-<a href=/tags/component class=tag>component (1)</a>
-<a href=/tags/css class=tag>css (3)</a>
-<a href=/tags/darkmode class=tag>darkmode (1)</a>
-<a href=/tags/database class=tag>database (2)</a>
-<a href=/tags/debug class=tag>debug (1)</a>
-<a href=/tags/deployment class=tag>deployment (1)</a>
-<a href=/tags/devops class=tag>devops (2)</a>
-<a href=/tags/disk class=tag>disk (1)</a>
-<a href=/tags/distributed-tracing class=tag>distributed-tracing (1)</a>
-<a href=/tags/django class=tag>django (1)</a>
-<a href=/tags/docker class=tag>docker (2)</a>
-<a href=/tags/driver class=tag>driver (1)</a>
-<a href=/tags/drone class=tag>drone (1)</a>
-<a href=/tags/echo class=tag>echo (2)</a>
-<a href=/tags/framework class=tag>framework (1)</a>
-<a href=/tags/git class=tag>git (1)</a>
-<a href=/tags/gitlab class=tag>gitlab (1)</a>
-<a href=/tags/go class=tag>go (8)</a>
-<a href=/tags/go-micro class=tag>go-micro (1)</a>
-<a href=/tags/golang class=tag>golang (1)</a>
-<a href=/tags/graceful-shutdown class=tag>graceful-shutdown (1)</a>
-<a href=/tags/grafana class=tag>grafana (1)</a>
-<a href=/tags/html class=tag>html (1)</a>
-<a href=/tags/ide class=tag>ide (1)</a>
-<a href=/tags/iframe class=tag>iframe (1)</a>
-<a href=/tags/informercat class=tag>informercat (1)</a>
-<a href=/tags/insomnia class=tag>insomnia (1)</a>
-<a href=/tags/javascript class=tag>javascript (1)</a>
-<a href=/tags/json class=tag>json (1)</a>
-<a href=/tags/k8s class=tag>k8s (1)</a>
-<a href=/tags/launch class=tag>launch (2)</a>
-<a href=/tags/life class=tag>life (1)</a>
-<a href=/tags/loki class=tag>loki (1)</a>
-<a href=/tags/macbook class=tag>macbook (1)</a>
-<a href=/tags/macos class=tag>macos (1)</a>
-<a href=/tags/microservices class=tag>microservices (1)</a>
-<a href=/tags/mongo class=tag>mongo (1)</a>
-<a href=/tags/mongodb class=tag>mongodb (2)</a>
-<a href=/tags/monitoring class=tag>monitoring (1)</a>
-<a href=/tags/nosql class=tag>nosql (1)</a>
-<a href=/tags/online class=tag>online (1)</a>
-<a href=/tags/pre-processors class=tag>pre-processors (1)</a>
-<a href=/tags/prometheus class=tag>prometheus (1)</a>
-<a href=/tags/query class=tag>query (1)</a>
-<a href=/tags/review class=tag>review (1)</a>
-<a href=/tags/s3 class=tag>s3 (1)</a>
-<a href=/tags/server class=tag>server (1)</a>
-<a href=/tags/ssh class=tag>ssh (1)</a>
-<a href=/tags/supics class=tag>supics (1)</a>
-<a href=/tags/tailwind class=tag>tailwind (1)</a>
-<a href=/tags/tempo class=tag>tempo (1)</a>
-<a href=/tags/test class=tag>test (2)</a>
-<a href=/tags/tips class=tag>tips (1)</a>
-<a href=/tags/tool class=tag>tool (3)</a>
-<a href=/tags/vagrant class=tag>vagrant (1)</a>
-<a href=/tags/vim class=tag>vim (1)</a>
-<a href=/tags/virtualbox class=tag>virtualbox (1)</a>
-<a href=/tags/vm class=tag>vm (1)</a>
-<a href=/tags/vscode class=tag>vscode (1)</a>
-<a href=/tags/vue class=tag>vue (6)</a>
-<a href=/tags/vue-cli class=tag>vue-cli (1)</a>
-<a href=/tags/webpack class=tag>webpack (2)</a>
-<a href=/tags/websocket class=tag>websocket (2)</a>
-<a href=/tags/zero-downtime class=tag>zero-downtime (1)</a></div></div></aside></main><footer class=site-footer><div>&copy; 2025 Cozi</div><div>Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a></div></footer></div><span class=article-tags><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><a href=/tags/debug>debug</a>
-<a href=/tags/go>go</a>
-<a href=/tags/vscode>vscode</a></span>
-<script async src="https://sdk.owids.com/js/app.js#id=bqnb4q1ba1fujo6isg10"></script></body></html>
+</code></pre></div><h4 id=step-2-add-breakpoint>Step 2: Add breakpoint</h4><p>Now we have our test for <code>helloServer</code>, next step we need to add a breakpoint right after this line <code>name := r.URL.Path[1:]</code> by click on the left of expect line number or move the pointer to the expect line number and press <code>F9</code> to toggle a breakpoint.</p><img class=article-image loading=lazy src=/posts/debugging-go-http-server-with-vs-code/add_breakpoint.jpg alt><h4 id=step-3-debug-test>Step 3: Debug test</h4><p>Finally, click on <code>debug test</code> to see the result:</p><img class=article-image loading=lazy src=/posts/debugging-go-http-server-with-vs-code/debug_test.jpg alt><p>Here, we can see the value of the <code>name</code> variable is <code>Foo</code> in the left panel or hover mouse on the <code>name</code> variable</p><img class=article-image loading=lazy src=/posts/debugging-go-http-server-with-vs-code/debug_result.jpg alt><h3 id=option-2-debug-with-http-request-using-dlv>Option 2: Debug with http request using dlv</h3><h4 id=step-1-install-dlv>Step 1: Install dlv</h4><p>Open the Command Palette (<code>Ctrl+Shift+P</code> or <code>Command+Shift+P</code>), select <code>Go: Install/Update Tools</code>, and select <code>dlv</code></p><h4 id=step-2-add-launch-configuration>Step 2: Add launch configuration</h4><p>Create <code>.vscode/launch.json</code> in your root project folder and put this content into it</p><div class=highlight><pre class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+    <span class=nt>&#34;version&#34;</span><span class=p>:</span> <span class=s2>&#34;0.2.0&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;configurations&#34;</span><span class=p>:</span> <span class=p>[</span>
+        <span class=p>{</span>
+            <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Launch&#34;</span><span class=p>,</span>
+            <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;go&#34;</span><span class=p>,</span>
+            <span class=nt>&#34;request&#34;</span><span class=p>:</span> <span class=s2>&#34;launch&#34;</span><span class=p>,</span>
+            <span class=nt>&#34;mode&#34;</span><span class=p>:</span> <span class=s2>&#34;auto&#34;</span><span class=p>,</span>
+            <span class=nt>&#34;program&#34;</span><span class=p>:</span> <span class=s2>&#34;${fileDirname}&#34;</span><span class=p>,</span>
+            <span class=nt>&#34;env&#34;</span><span class=p>:</span> <span class=p>{},</span>
+            <span class=nt>&#34;args&#34;</span><span class=p>:</span> <span class=p>[]</span>
+        <span class=p>}</span>
+    <span class=p>]</span>
+<span class=p>}</span>
+</code></pre></div><p><strong>Note:</strong> If your <code>main.go</code> file inside sub folder like <code>cmd/api/main.go</code>, you may want add this config to <code>launch.json</code> file to set current working directory to root project folder: <code>"cwd": "${workspaceRoot}"</code></p><h4 id=step-3-add-breakpoint>Step 3: Add breakpoint</h4><p>This step is the same as add breakpoint like <a href=#step-2-add-breakpoint>Option 1</a></p><h4 id=step-4-run-and-debug>Step 4: Run and Debug</h4><p>Open the <code>main.go</code> file and press <code>F5</code> and you ready to &ldquo;Go&rdquo; :)<br>Next, open your favorite terminal and enter <code>curl localhost:8080/Baz</code> for example. Now you can see the debug result:</p><img class=article-image loading=lazy src=/posts/debugging-go-http-server-with-vs-code/http_debug_result.jpg alt><h2 id=source-code>Source code</h2><p>You can find source code for this article at <a href=https://github.com/cozi-dev/go-debugging target=_blank>GitHub</a>.</p><h2 id=conclusion>Conclusion</h2><p>Above are two debug options for Go using VS Code which is very useful. For me, I prefer to cover as many tests as possible (Option 1), but when I need to debug a full flow of a request then Option 2 will be the best choice. And you? Which method do you use for debugging Go code?</p></div><div class="post-share glass"><span class=share-label>Share:</span>
+<a href="https://twitter.com/intent/tweet?text=Debugging+Go+http+server+with+VS+Code&url=https%3A%2F%2Fcozi.dev%2Fposts%2Fdebugging-go-http-server-with-vs-code%2F" target=_blank rel=noopener>Twitter</a>
+<a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcozi.dev%2Fposts%2Fdebugging-go-http-server-with-vs-code%2F" target=_blank rel=noopener>LinkedIn</a>
+<button class=copy-link data-url=https://cozi.dev/posts/debugging-go-http-server-with-vs-code/ type=button>Copy link</button></div><nav class=post-prevnext aria-label="Post navigation"><a class="prevnext-card glass glass-hover" href=/posts/effective-testing-api-with-insomnia/><span class=prevnext-label>← Newer</span>
+<strong>Effective testing API with Insomnia</strong></a>
+<a class="prevnext-card glass glass-hover is-next" href=/posts/inject-vue-instance-into-an-iframe-that-create-in-runtime/><span class=prevnext-label>Older →</span>
+<strong>Inject Vue instance into an iframe that create in runtime</strong></a></nav><div class="post-comments glass"><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"cozi-dev"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></article></main><footer class=site-footer><div class=footer-inner><div class=footer-social><a href=https://github.com/tungquach target=_blank rel=noopener>GitHub</a>
+<a href=/index.xml>RSS</a></div><p class=footer-copy>© 2026 Cozi · built with Hugo</p></div></footer></body></html>
